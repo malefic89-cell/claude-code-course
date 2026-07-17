@@ -28,6 +28,18 @@ export const t = {
   module: {
     heading: (id: string, title: string): string => `Модуль ${id}. ${title}`,
     taskCount: (n: number): string => `${n} ${pluralRu(n, "задача", "задачи", "задач")}`,
+    backToModules: "← Все модули",
+  },
+
+  task: {
+    minutes: (n: number): string => `~${n} мин`,
+    statusDone: "Выполнено",
+  },
+
+  difficulty: {
+    easy: "легко",
+    medium: "средне",
+    hard: "сложно",
   },
 
   progress: {

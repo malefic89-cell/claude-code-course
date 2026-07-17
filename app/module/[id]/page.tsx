@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getModule, getModuleTasks, getModules } from "@/lib/content";
+import { getModule, getModuleTasks, getModules, type TaskMeta } from "@/lib/content";
+import { t } from "@/lib/i18n";
+import TaskList from "@/components/TaskList";
 
 export function generateStaticParams() {
   return getModules().map((m) => ({ id: m.id }));
@@ -9,24 +11,28 @@ export function generateStaticParams() {
 export default function ModulePage({ params }: { params: { id: string } }) {
   const mod = getModule(params.id);
   if (!mod) notFound();
-  const tasks = getModuleTasks(mod.id);
+  // Клиентскому списку нужны только метаданные, без Markdown-тел задач.
+  const tasks: TaskMeta[] = getModuleTasks(mod.id).map(
+    ({ id, module, title, difficulty, estimated_minutes, verified_date }) => ({
+      id,
+      module,
+      title,
+      difficulty,
+      estimated_minutes,
+      verified_date,
+    }),
+  );
   return (
     <main className="mx-auto max-w-2xl p-6">
-      <Link href="/" className="text-sm text-gray-500 hover:underline">← Все модули</Link>
-      <h1 className="mt-2 text-2xl font-bold">Модуль {mod.id}. {mod.title}</h1>
+      <Link href="/" className="text-sm text-gray-500 hover:underline">
+        {t.module.backToModules}
+      </Link>
+      <h1 className="mt-2 text-2xl font-bold">{t.module.heading(mod.id, mod.title)}</h1>
       <p className="mt-1 text-gray-600">{mod.description}</p>
-      <ul className="mt-6 space-y-2">
-        {tasks.map((t) => (
-          <li key={t.id} className="rounded-lg border p-3">
-            <Link href={`/task/${t.id}`} className="hover:underline">
-              {t.id}. {t.title}
-            </Link>
-            <span className="ml-2 text-xs text-gray-400">
-              {t.difficulty} · ~{t.estimated_minutes} мин
-            </span>
-          </li>
-        ))}
-      </ul>
+      <p className="mt-1 text-xs text-gray-400">{t.module.taskCount(tasks.length)}</p>
+      <div className="mt-6">
+        <TaskList tasks={tasks} />
+      </div>
     </main>
   );
 }
