@@ -10,7 +10,7 @@ interface TaskDoneButtonProps {
 
 /** Кнопка «Выполнено»: отмечает задачу через lib/progress.ts. */
 export default function TaskDoneButton({ taskId }: TaskDoneButtonProps) {
-  const { done, refresh } = useDoneSet();
+  const { done } = useDoneSet();
   const isDone = done.has(taskId);
   const toggle = () => {
     if (isDone) {
@@ -18,7 +18,6 @@ export default function TaskDoneButton({ taskId }: TaskDoneButtonProps) {
     } else {
       markDone(taskId);
     }
-    refresh();
   };
   return (
     <button

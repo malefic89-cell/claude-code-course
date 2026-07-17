@@ -40,6 +40,49 @@ function write(p: Progress): void {
   } catch {
     // localStorage может быть недоступен (приватный режим) — прогресс просто не сохранится.
   }
+  emit();
+}
+
+/* ---- Подписка на изменения (для useSyncExternalStore в компонентах) ---- */
+
+const listeners = new Set<() => void>();
+
+function emit(): void {
+  listeners.forEach((l) => l());
+}
+
+/** Подписка на изменения прогресса (включая другие вкладки). */
+export function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  window.addEventListener("storage", listener);
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener("storage", listener);
+  };
+}
+
+const EMPTY_PROGRESS: Progress = { done: [] };
+let snapshotCache: { raw: string | null; progress: Progress } | null = null;
+
+/**
+ * Снимок прогресса для useSyncExternalStore: ссылочно стабилен,
+ * пока содержимое хранилища не изменилось.
+ */
+export function getProgressSnapshot(): Progress {
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return EMPTY_PROGRESS;
+  }
+  if (snapshotCache && snapshotCache.raw === raw) return snapshotCache.progress;
+  snapshotCache = { raw, progress: read() };
+  return snapshotCache.progress;
+}
+
+/** Снимок для серверного рендера и гидратации: пустой прогресс. */
+export function getServerProgressSnapshot(): Progress {
+  return EMPTY_PROGRESS;
 }
 
 /** Текущий прогресс. */

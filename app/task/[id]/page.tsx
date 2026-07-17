@@ -10,8 +10,9 @@ export function generateStaticParams() {
   return getModules().flatMap((m) => m.tasks.map((id) => ({ id })));
 }
 
-export default function TaskPage({ params }: { params: { id: string } }) {
-  const task = getTask(params.id);
+export default async function TaskPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const task = getTask(id);
   if (!task) notFound();
   const { prev, next } = getAdjacentTaskIds(task.id);
   const prevTask = prev ? getTask(prev) : null;

@@ -8,8 +8,9 @@ export function generateStaticParams() {
   return getModules().map((m) => ({ id: m.id }));
 }
 
-export default function ModulePage({ params }: { params: { id: string } }) {
-  const mod = getModule(params.id);
+export default async function ModulePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const mod = getModule(id);
   if (!mod) notFound();
   // Клиентскому списку нужны только метаданные, без Markdown-тел задач.
   const tasks: TaskMeta[] = getModuleTasks(mod.id).map(
