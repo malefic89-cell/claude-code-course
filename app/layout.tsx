@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Link from "next/link";
 import { t } from "@/lib/i18n";
 import "./globals.css";
 
@@ -29,6 +30,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="border-b">
+          <div className="mx-auto max-w-2xl px-4 py-3 sm:px-6">
+            <Link href="/" className="font-semibold hover:text-emerald-700">
+              {t.siteTitle}
+            </Link>
+          </div>
+        </header>
         {children}
       </body>
     </html>

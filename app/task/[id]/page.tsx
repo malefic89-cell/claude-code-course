@@ -17,11 +17,11 @@ export default function TaskPage({ params }: { params: { id: string } }) {
   const prevTask = prev ? getTask(prev) : null;
   const nextTask = next ? getTask(next) : null;
   return (
-    <main className="mx-auto max-w-2xl p-6">
+    <main className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
       <Link href={`/module/${task.module}`} className="text-sm text-gray-500 hover:underline">
         {t.task.backToModule(task.module)}
       </Link>
-      <h1 className="mt-2 text-2xl font-bold">
+      <h1 className="mt-2 text-xl font-bold sm:text-2xl">
         {task.id}. {task.title}
       </h1>
       <p className="mt-2 flex items-center gap-2 text-xs text-gray-400">

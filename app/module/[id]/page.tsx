@@ -23,7 +23,7 @@ export default function ModulePage({ params }: { params: { id: string } }) {
     }),
   );
   return (
-    <main className="mx-auto max-w-2xl p-6">
+    <main className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
       <Link href="/" className="text-sm text-gray-500 hover:underline">
         {t.module.backToModules}
       </Link>

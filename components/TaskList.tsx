@@ -21,7 +21,7 @@ export default function TaskList({ tasks }: TaskListProps) {
           <li key={task.id}>
             <Link
               href={`/task/${task.id}`}
-              className="flex items-center gap-3 rounded-xl border p-3 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
+              className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border p-3 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
             >
               <span
                 aria-label={isDone ? t.task.statusDone : undefined}
@@ -33,7 +33,7 @@ export default function TaskList({ tasks }: TaskListProps) {
               >
                 ✓
               </span>
-              <span className="min-w-0 flex-1">
+              <span className="min-w-[10rem] flex-1">
                 <span className={isDone ? "text-gray-400 line-through" : ""}>
                   {task.id}. {task.title}
                 </span>
