@@ -41,11 +41,11 @@
 
 ## Этап 2. Каркас приложения (~2–3 дня)
 
-- ☐ Инициализация: Next.js 14+ (App Router), TypeScript, Tailwind, ESLint
-- ☐ Структура папок по CLAUDE.md
-- ☐ `lib/content.ts`: загрузка модулей (JSON) и задач (Markdown + frontmatter), типы `Module`, `Task`
-- ☐ `lib/progress.ts`: интерфейс `getProgress / markDone / reset` поверх localStorage
-- ☐ Заглушечный контент (1 модуль, 2 задачи) для разработки UI
+- ✅ Инициализация: Next.js 14+ (App Router), TypeScript, Tailwind, ESLint
+- ✅ Структура папок по CLAUDE.md
+- ✅ `lib/content.ts`: загрузка модулей (JSON) и задач (Markdown + frontmatter), типы `Module`, `Task`
+- ✅ `lib/progress.ts`: интерфейс `getProgress / markDone / reset` поверх localStorage
+- ✅ Заглушечный контент (1 модуль, 2 задачи) для разработки UI
 
 **Критерий готовности:** `npm run build` проходит, контент читается из файлов, типы без `any`.
 
