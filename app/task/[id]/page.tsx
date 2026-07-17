@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAdjacentTaskIds, getModules, getTask } from "@/lib/content";
+import { t } from "@/lib/i18n";
+import DifficultyBadge from "@/components/DifficultyBadge";
+import TaskBody from "@/components/TaskBody";
+import TaskDoneButton from "@/components/TaskDoneButton";
 
 export function generateStaticParams() {
   return getModules().flatMap((m) => m.tasks.map((id) => ({ id })));
@@ -10,20 +14,47 @@ export default function TaskPage({ params }: { params: { id: string } }) {
   const task = getTask(params.id);
   if (!task) notFound();
   const { prev, next } = getAdjacentTaskIds(task.id);
+  const prevTask = prev ? getTask(prev) : null;
+  const nextTask = next ? getTask(next) : null;
   return (
     <main className="mx-auto max-w-2xl p-6">
       <Link href={`/module/${task.module}`} className="text-sm text-gray-500 hover:underline">
-        ← Модуль {task.module}
+        {t.task.backToModule(task.module)}
       </Link>
-      <h1 className="mt-2 text-2xl font-bold">{task.id}. {task.title}</h1>
-      <p className="mt-1 text-xs text-gray-400">{task.difficulty} · ~{task.estimated_minutes} мин</p>
-      <pre className="mt-6 whitespace-pre-wrap rounded-lg border bg-gray-50 p-4 text-sm">
-        {task.body}
-      </pre>
-      <div className="mt-6 flex justify-between text-sm">
-        {prev ? <Link href={`/task/${prev}`} className="hover:underline">← {prev}</Link> : <span />}
-        {next ? <Link href={`/task/${next}`} className="hover:underline">{next} →</Link> : <span />}
+      <h1 className="mt-2 text-2xl font-bold">
+        {task.id}. {task.title}
+      </h1>
+      <p className="mt-2 flex items-center gap-2 text-xs text-gray-400">
+        <DifficultyBadge difficulty={task.difficulty} />
+        {t.task.minutes(task.estimated_minutes)}
+      </p>
+      <div className="mt-4">
+        <TaskBody body={task.body} />
       </div>
+      <div className="mt-8">
+        <TaskDoneButton taskId={task.id} />
+      </div>
+      <nav className="mt-8 flex justify-between gap-4 border-t pt-4 text-sm">
+        {prevTask ? (
+          <Link href={`/task/${prevTask.id}`} className="min-w-0 text-gray-600 hover:underline">
+            <span className="block text-xs text-gray-400">{t.task.prevTask}</span>
+            <span className="block truncate">{prevTask.title}</span>
+          </Link>
+        ) : (
+          <span />
+        )}
+        {nextTask ? (
+          <Link
+            href={`/task/${nextTask.id}`}
+            className="min-w-0 text-right text-gray-600 hover:underline"
+          >
+            <span className="block text-xs text-gray-400">{t.task.nextTask}</span>
+            <span className="block truncate">{nextTask.title}</span>
+          </Link>
+        ) : (
+          <span />
+        )}
+      </nav>
     </main>
   );
 }

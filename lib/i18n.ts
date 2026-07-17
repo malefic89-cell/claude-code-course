@@ -34,6 +34,11 @@ export const t = {
   task: {
     minutes: (n: number): string => `~${n} мин`,
     statusDone: "Выполнено",
+    backToModule: (id: string): string => `← Модуль ${id}`,
+    markDone: "Отметить выполненной",
+    unmarkDone: "✓ Выполнено — снять отметку",
+    prevTask: "← Предыдущая",
+    nextTask: "Следующая →",
   },
 
   difficulty: {
