@@ -12,6 +12,12 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      // Переменные объявляет next/font/local в app/layout.tsx.
+      // Через theme они попадают в preflight: sans — на html, mono — на code/pre.
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+      },
     },
   },
   plugins: [],
