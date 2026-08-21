@@ -14,10 +14,11 @@
   color-scheme: light;
 }
 
+/* Шрифт задаётся через theme.fontFamily в tailwind.config.ts (preflight ставит
+   его на html), поэтому здесь font-family не переопределяем. */
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
