@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Приложение оформлено светлой палитрой (Tailwind-классы text-gray-*, bg-emerald-*
+ * без dark:-вариантов), поэтому тема зафиксирована светлой.
+ * Тёмная тема — отдельная задача: включать её нужно вместе с dark:-вариантами
+ * во всех компонентах, иначе серый текст ложится на тёмный фон.
+ */
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
 }
 
 body {
