@@ -13,6 +13,11 @@ export function pluralRu(n: number, one: string, few: string, many: string): str
   return many;
 }
 
+/** Человекочитаемый номер модуля: "00" → "0", "01" → "1". Id задач ("01-03") не трогаем. */
+export function moduleNumber(id: string): string {
+  return String(Number.parseInt(id, 10));
+}
+
 export const t = {
   siteTitle: "Claude Code Course",
   siteDescription: "Практический курс по работе в Claude Code",
@@ -26,7 +31,7 @@ export const t = {
   },
 
   module: {
-    heading: (id: string, title: string): string => `Модуль ${id}. ${title}`,
+    heading: (id: string, title: string): string => `Модуль ${moduleNumber(id)}. ${title}`,
     taskCount: (n: number): string => `${n} ${pluralRu(n, "задача", "задачи", "задач")}`,
     backToModules: "← Все модули",
   },
@@ -34,7 +39,7 @@ export const t = {
   task: {
     minutes: (n: number): string => `~${n} мин`,
     statusDone: "Выполнено",
-    backToModule: (id: string): string => `← Модуль ${id}`,
+    backToModule: (id: string): string => `← Модуль ${moduleNumber(id)}`,
     markDone: "Отметить выполненной",
     unmarkDone: "✓ Выполнено — снять отметку",
     prevTask: "← Предыдущая",
