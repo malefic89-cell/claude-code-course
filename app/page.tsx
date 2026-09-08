@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { getModules, getModuleTasks, type TaskMeta } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import ModuleCard from "@/components/ModuleCard";
+import ProgrammeLink from "@/components/ProgrammeLink";
 import ProgressCard from "@/components/ProgressCard";
 import StartButton from "@/components/StartButton";
 
@@ -36,12 +36,9 @@ export default function Home() {
           <p className="max-w-xl text-lg leading-relaxed text-body sm:text-xl">{t.home.intro}</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
             <StartButton taskIds={allTasks.map((task) => task.id)} />
-            <Link
-              href="#programme"
-              className="border-b border-muted text-[15px] text-muted hover:border-ink hover:text-ink"
-            >
+            <ProgrammeLink className="border-b border-muted text-[15px] text-muted hover:border-ink hover:text-ink">
               {t.home.viewProgramme}
-            </Link>
+            </ProgrammeLink>
           </div>
         </div>
         <ProgressCard tasks={allTasks} />
@@ -52,7 +49,7 @@ export default function Home() {
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t.home.programmeTitle}</h2>
           <p className="font-mono text-xs uppercase tracking-wider text-muted">{t.home.programmeNote}</p>
         </div>
-        <ul>
+        <ul className="mt-8 flex flex-col gap-5 sm:mt-10 sm:gap-6">
           {modules.map((m, i) => (
             <li key={m.id}>
               <ModuleCard

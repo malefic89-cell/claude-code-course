@@ -5,6 +5,7 @@ import { t } from "@/lib/i18n";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import CourseRail, { type RailModule } from "@/components/CourseRail";
 import Mascot from "@/components/Mascot";
+import ProgrammeLink from "@/components/ProgrammeLink";
 import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
@@ -38,12 +39,9 @@ export default function RootLayout({
               <span>{t.siteTitle}</span>
             </Link>
             <div className="flex items-center gap-4">
-              <Link
-                href="/#programme"
-                className="text-xs font-semibold uppercase tracking-wider text-muted hover:text-ink"
-              >
+              <ProgrammeLink className="text-xs font-semibold uppercase tracking-wider text-muted hover:text-ink">
                 {t.nav.programme}
-              </Link>
+              </ProgrammeLink>
               <ThemeToggle />
             </div>
           </div>

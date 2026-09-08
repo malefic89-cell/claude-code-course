@@ -19,6 +19,9 @@ export default function ModuleCard({ module: mod, minutes }: ModuleCardProps) {
   const doneCount = mod.tasks.filter((id) => done.has(id)).length;
   const total = mod.tasks.length;
   const next = mod.tasks.find((id) => !done.has(id));
+  const isComplete = doneCount === total;
+  // Линейка слева показывает состояние: серая — не начат, акцент — в работе, чернила — пройден.
+  const rule = isComplete ? "border-ink" : doneCount > 0 ? "border-accent" : "border-line";
   const status =
     doneCount === 0
       ? t.home.moduleNotStarted(total)
@@ -28,7 +31,7 @@ export default function ModuleCard({ module: mod, minutes }: ModuleCardProps) {
   return (
     <Link
       href={`/module/${mod.id}`}
-      className="group grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-3 border-b border-line py-6 sm:grid-cols-[5rem_1fr_18rem_5rem] sm:gap-x-6 sm:py-7"
+      className={`group grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-3 border p-5 transition-colors hover:border-accent sm:grid-cols-[5rem_1fr_18rem_5rem] sm:gap-x-6 sm:p-7 ${rule}`}
     >
       <span
         className={`font-numeral text-4xl font-bold leading-none sm:text-5xl ${doneCount > 0 ? "text-accent" : "text-dim"}`}
