@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Source_Sans_3, Source_Serif_4 } from "next/font/google";
+import { IBM_Plex_Mono, Playfair_Display, Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import Link from "next/link";
 import { getModules, getModuleTasks } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import CourseRail, { type RailModule } from "@/components/CourseRail";
 import "./globals.css";
 
-const serif = Source_Serif_4({
+const serif = Playfair_Display({
   subsets: ["latin", "cyrillic"],
   weight: ["500", "700"],
   style: ["normal", "italic"],
   variable: "--font-serif",
+});
+// Цифры (номера глав, прогресс, шаги): у Playfair они слишком контрастные.
+const numeral = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-numeral",
 });
 const sans = Source_Sans_3({
   subsets: ["latin", "cyrillic"],
@@ -41,7 +47,7 @@ export default function RootLayout({
   }));
   return (
     <html lang="ru">
-      <body className={`${serif.variable} ${sans.variable} ${mono.variable} antialiased`}>
+      <body className={`${serif.variable} ${numeral.variable} ${sans.variable} ${mono.variable} antialiased`}>
         <header className="border-b-2 border-ink">
           <div className="mx-auto flex max-w-[1440px] items-baseline justify-between px-5 py-5 sm:px-10">
             <Link href="/" className="font-serif text-xl font-bold hover:text-accent">

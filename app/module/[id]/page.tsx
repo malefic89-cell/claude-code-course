@@ -31,7 +31,7 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
       </Link>
       <div className="mt-6 grid gap-10 lg:grid-cols-[18rem_1fr] lg:gap-16">
         <header className="flex flex-col gap-4">
-          <p className="font-serif text-7xl font-bold leading-[0.9] text-accent sm:text-8xl">
+          <p className="font-numeral text-7xl font-bold leading-[0.9] text-accent sm:text-8xl">
             {moduleNumber(mod.id).padStart(2, "0")}
           </p>
           <h1 className="font-serif text-3xl font-medium leading-tight">{mod.title}</h1>

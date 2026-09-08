@@ -51,7 +51,7 @@ export default function CourseRail({ modules }: CourseRailProps) {
               <Link href={`/module/${mod.id}`} className="group flex flex-col gap-2">
                 <span className="flex items-baseline gap-2.5">
                   <span
-                    className={`font-serif text-lg font-bold leading-none ${doneCount > 0 || isActive ? "text-accent" : "text-dim"}`}
+                    className={`font-numeral text-lg font-bold leading-none ${doneCount > 0 || isActive ? "text-accent" : "text-dim"}`}
                   >
                     {moduleNumber(mod.id).padStart(2, "0")}
                   </span>

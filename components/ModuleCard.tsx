@@ -30,7 +30,7 @@ export default function ModuleCard({ module: mod, minutes }: ModuleCardProps) {
       className="group grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-3 border-b border-line py-6 sm:grid-cols-[5rem_1fr_18rem_5rem] sm:gap-x-6 sm:py-7"
     >
       <span
-        className={`font-serif text-4xl font-bold leading-none sm:text-5xl ${doneCount > 0 ? "text-accent" : "text-dim"}`}
+        className={`font-numeral text-4xl font-bold leading-none sm:text-5xl ${doneCount > 0 ? "text-accent" : "text-dim"}`}
       >
         {moduleNumber(mod.id).padStart(2, "0")}
       </span>
