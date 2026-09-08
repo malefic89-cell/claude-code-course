@@ -8,15 +8,26 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Палитра «Журнал»: белый лист, чернила, один акцент (ультрафиолет).
+      // Акцент задан CSS-переменной в globals.css — оттенок меняется в одном месте.
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        ink: "#141216",
+        body: "#3d3944",
+        muted: "#6b6672",
+        dim: "#c9c4d1",
+        line: "#e6e3ea",
+        faint: "#eeecf1",
+        accent: {
+          DEFAULT: "var(--accent)",
+          soft: "var(--accent-soft)",
+          line: "var(--accent-line)",
+        },
       },
-      // Переменные объявляет next/font/local в app/layout.tsx.
-      // Через theme они попадают в preflight: sans — на html, mono — на code/pre.
+      // Переменные объявляет next/font/google в app/layout.tsx.
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "Consolas", "monospace"],
       },
     },
   },

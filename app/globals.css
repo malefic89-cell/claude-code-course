@@ -3,22 +3,47 @@
 @tailwind utilities;
 
 /*
- * Приложение оформлено светлой палитрой (Tailwind-классы text-gray-*, bg-emerald-*
- * без dark:-вариантов), поэтому тема зафиксирована светлой.
- * Тёмная тема — отдельная задача: включать её нужно вместе с dark:-вариантами
- * во всех компонентах, иначе серый текст ложится на тёмный фон.
+ * Оформление «Журнал»: белый лист, чернильный текст, один акцентный цвет.
+ * Тема зафиксирована светлой: Tailwind-классы без dark:-вариантов.
+ * Тёмная тема — отдельная задача.
  */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --accent: #5b1fe6;
+  --accent-soft: #f3eefe;
+  --accent-line: #cdbcf7;
   color-scheme: light;
 }
 
-/* Шрифт задаётся через theme.fontFamily в tailwind.config.ts (preflight ставит
-   его на html), поэтому здесь font-family не переопределяем. */
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: #141216;
+  background: #ffffff;
+}
+
+/* Шаги инструкции: цифры антиквой акцентного цвета, как на полях книги. */
+.task-steps ol {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: step;
+}
+.task-steps ol > li {
+  position: relative;
+  padding-left: 2.25rem;
+  counter-increment: step;
+}
+.task-steps ol > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15em;
+  line-height: 1.5;
+  color: var(--accent);
+}
+/* Вложенные списки внутри шага — обычные маркеры. */
+.task-steps ol > li ul {
+  list-style: disc;
 }
 
 @layer utilities {
