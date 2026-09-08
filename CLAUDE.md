@@ -27,17 +27,21 @@
 
 ```
 /app                — маршруты Next.js (App Router)
-  /page.tsx         — главная: каталог модулей + общий прогресс
-  /module/[id]      — страница модуля со списком задач
-  /task/[id]        — карточка задачи
-/components         — UI-компоненты (ModuleCard, TaskChecklist, ProgressBar…)
+  /layout.tsx       — шапка, переключатель темы, левая рейка «Карта курса»
+  /page.tsx         — главная: заголовок, карточка прогресса, программа
+  /module/[id]      — страница модуля с оглавлением задач
+  /task/[id]        — страница задачи
+/components         — UI-компоненты (ModuleCard, TaskList, TaskBody, TaskCompletion, CourseRail…)
 /content
-  /modules          — module-01.json, module-02.json… (метаданные модулей)
-  /tasks            — task-01-01.md… (тексты задач в Markdown с frontmatter)
+  /modules          — module-00.json, module-01.json… (метаданные модулей)
+  /tasks            — task-00-00.md… (тексты задач в Markdown с frontmatter)
 /lib
   /content.ts       — загрузка и парсинг контента
   /progress.ts      — API прогресса (единственная точка работы с хранилищем)
-/public             — статика, иконки модулей
+  /i18n.ts          — словарь строк интерфейса
+  /theme.ts         — светлая/тёмная тема (хранится отдельно от прогресса)
+/public             — статика
+CONTRACT.md         — границы между контентом, прогрессом и интерфейсом
 ```
 
 ## Формат контента
