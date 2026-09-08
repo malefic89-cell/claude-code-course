@@ -4,6 +4,7 @@ import { getModules, getModuleTasks } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import CourseRail, { type RailModule } from "@/components/CourseRail";
+import Mascot from "@/components/Mascot";
 import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
@@ -31,9 +32,10 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <header className="border-b-2 border-ink">
-          <div className="mx-auto flex max-w-[1440px] items-baseline justify-between px-5 py-5 sm:px-10">
-            <Link href="/" className="font-serif text-xl font-bold hover:text-accent">
-              {t.siteTitle}
+          <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 sm:px-10">
+            <Link href="/" className="group flex items-center gap-2.5 font-serif text-xl font-bold hover:text-accent">
+              <Mascot className="h-8 w-8 transition-transform group-hover:-rotate-6" />
+              <span>{t.siteTitle}</span>
             </Link>
             <div className="flex items-center gap-4">
               <Link
