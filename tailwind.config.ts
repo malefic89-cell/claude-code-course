@@ -8,19 +8,27 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Палитра «Журнал»: белый лист, чернила, один акцент (ультрафиолет).
-      // Акцент задан CSS-переменной в globals.css — оттенок меняется в одном месте.
+      // Палитра «Журнал»: семантические имена поверх CSS-переменных из globals.css.
+      // Светлые и тёмные значения задаются там; компоненты не знают о теме.
       colors: {
-        ink: "#141216",
-        body: "#3d3944",
-        muted: "#6b6672",
-        dim: "#c9c4d1",
-        line: "#e6e3ea",
-        faint: "#eeecf1",
+        paper: "var(--paper)",
+        ink: "var(--ink)",
+        body: "var(--body)",
+        muted: "var(--muted)",
+        dim: "var(--dim)",
+        line: "var(--line)",
+        faint: "var(--faint)",
+        warn: "var(--warn)",
+        danger: "var(--danger)",
         accent: {
           DEFAULT: "var(--accent)",
+          fg: "var(--accent-fg)",
           soft: "var(--accent-soft)",
           line: "var(--accent-line)",
+        },
+        code: {
+          bg: "var(--code-bg)",
+          fg: "var(--code-fg)",
         },
       },
       // Переменные объявляет next/font/google в app/layout.tsx.

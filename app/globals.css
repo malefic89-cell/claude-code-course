@@ -3,20 +3,52 @@
 @tailwind utilities;
 
 /*
- * Оформление «Журнал»: белый лист, чернильный текст, один акцентный цвет.
- * Тема зафиксирована светлой: Tailwind-классы без dark:-вариантов.
- * Тёмная тема — отдельная задача.
+ * Оформление «Журнал»: лист, чернила, один акцентный цвет.
+ * Все цвета — семантические переменные; тёмная тема переопределяет их
+ * под html[data-theme="dark"]. Компоненты не используют dark:-варианты.
+ * Атрибут data-theme выставляет lib/theme.ts (скрипт в layout — до первой отрисовки).
  */
 :root {
+  --paper: #ffffff;
+  --ink: #141216;
+  --body: #3d3944;
+  --muted: #6b6672;
+  --dim: #c9c4d1;
+  --line: #e6e3ea;
+  --faint: #eeecf1;
   --accent: #5b1fe6;
+  --accent-fg: #ffffff;
   --accent-soft: #f3eefe;
   --accent-line: #cdbcf7;
+  --code-bg: #141216;
+  --code-fg: #f4f2f7;
+  --warn: #b45309;
+  --danger: #be123c;
   color-scheme: light;
 }
 
+html[data-theme="dark"] {
+  --paper: #131118;
+  --ink: #f1eef5;
+  --body: #cfc9d6;
+  --muted: #9a93a3;
+  --dim: #4a4552;
+  --line: #2a2630;
+  --faint: #1e1a25;
+  --accent: #9d7bff;
+  --accent-fg: #120c24;
+  --accent-soft: #221b38;
+  --accent-line: #4b3a80;
+  --code-bg: #1e1a25;
+  --code-fg: #f1eef5;
+  --warn: #f0a94a;
+  --danger: #fb7185;
+  color-scheme: dark;
+}
+
 body {
-  color: #141216;
-  background: #ffffff;
+  color: var(--ink);
+  background: var(--paper);
 }
 
 /* Шаги инструкции: цифры антиквой акцентного цвета, как на полях книги. */

@@ -20,7 +20,7 @@ export default function Markdown({ children }: MarkdownProps) {
         a: (props) => <a className="text-accent underline hover:text-ink" {...props} />,
         pre: (props) => (
           <pre
-            className="mt-3 overflow-x-auto bg-ink px-5 py-4 font-mono text-sm leading-relaxed text-white"
+            className="mt-3 overflow-x-auto bg-code-bg px-5 py-4 font-mono text-sm leading-relaxed text-code-fg"
             {...props}
           />
         ),

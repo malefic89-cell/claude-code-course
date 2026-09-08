@@ -55,8 +55,8 @@ export default function TaskCompletion({
           aria-pressed={isDone}
           className={`inline-flex h-12 w-full items-center justify-center gap-3 px-7 font-semibold transition-colors duration-300 sm:w-auto ${
             isDone
-              ? "border border-ink bg-white text-ink hover:border-accent hover:text-accent"
-              : "bg-accent text-white hover:bg-ink"
+              ? "border border-ink bg-paper text-ink hover:border-accent hover:text-accent"
+              : "bg-accent text-accent-fg hover:bg-ink hover:text-paper"
           } ${justDone ? "stamp" : ""}`}
         >
           <svg

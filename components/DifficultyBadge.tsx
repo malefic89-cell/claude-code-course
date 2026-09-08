@@ -3,8 +3,8 @@ import { t } from "@/lib/i18n";
 
 const STYLES: Record<Difficulty, string> = {
   easy: "text-muted",
-  medium: "text-amber-700",
-  hard: "text-rose-700",
+  medium: "text-warn",
+  hard: "text-danger",
 };
 
 interface DifficultyBadgeProps {

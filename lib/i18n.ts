@@ -35,6 +35,11 @@ export const t = {
     programme: "Программа",
   },
 
+  theme: {
+    toDark: "Включить тёмную тему",
+    toLight: "Включить светлую тему",
+  },
+
   rail: {
     title: "Карта курса",
     total: (done: number, total: number): string =>

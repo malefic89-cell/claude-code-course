@@ -5,8 +5,8 @@ interface ProgressBarProps {
   value: number;
   /** Всего. */
   max: number;
-  /** Цвет дорожки: на белом — светло-серый, на акцентной подложке — белый. */
-  track?: "faint" | "white";
+  /** Цвет дорожки: на листе — светло-серый, на акцентной подложке — цвет листа. */
+  track?: "faint" | "paper";
 }
 
 /** Тонкая линейка прогресса в стиле «Журнал». */
@@ -19,7 +19,7 @@ export default function ProgressBar({ value, max, track = "faint" }: ProgressBar
       aria-valuenow={value}
       aria-valuemin={0}
       aria-valuemax={max}
-      className={`h-1 w-full ${track === "white" ? "bg-white" : "bg-faint"}`}
+      className={`h-1 w-full ${track === "paper" ? "bg-paper" : "bg-faint"}`}
     >
       <div className="h-full bg-accent transition-[width] duration-700 ease-out" style={{ width: `${percent}%` }} />
     </div>

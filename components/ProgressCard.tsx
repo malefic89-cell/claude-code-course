@@ -22,7 +22,7 @@ export default function ProgressCard({ tasks }: ProgressCardProps) {
         <span key={doneCount} className="page-in font-numeral text-5xl font-bold leading-none sm:text-6xl">{doneCount}</span>
         <span className="text-lg text-muted">{t.home.progressOf(tasks.length)}</span>
       </p>
-      <ProgressBar value={doneCount} max={tasks.length} track="white" />
+      <ProgressBar value={doneCount} max={tasks.length} track="paper" />
       <p className="text-[15px] leading-snug text-body">
         {next ? t.home.progressNext(next.id, next.title) : t.home.progressDone}
       </p>
