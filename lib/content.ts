@@ -98,7 +98,14 @@ export function getTask(id: string): Task | null {
   const file = path.join(TASKS_DIR, `task-${id}.md`);
   if (!fs.existsSync(file)) return null;
   const { data, content } = matter(fs.readFileSync(file, "utf-8"));
-  return { ...assertTaskMeta(data, file), body: content.trim() };
+  const meta = assertTaskMeta(data, file);
+  // Модуль из frontmatter должен существовать и содержать задачу — иначе навигация
+  // и баннер «модуль пройден» ведут в никуда. Ошибка сборки, не тихий пропуск.
+  const mod = getModule(meta.module);
+  if (!mod || !mod.tasks.includes(meta.id)) {
+    throw new Error(`Задача ${meta.id}: модуль "${meta.module}" не найден или не содержит её (${file})`);
+  }
+  return { ...meta, body: content.trim() };
 }
 
 /** Задачи модуля в порядке, заданном в метаданных модуля. */

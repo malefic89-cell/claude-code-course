@@ -9,18 +9,22 @@ interface StartButtonProps {
   taskIds: string[];
 }
 
-/** Главная кнопка: «Начать курс» или «Продолжить · id» первой невыполненной задачи. */
+/**
+ * Главная кнопка: «Начать курс», «Продолжить · id» первой невыполненной задачи
+ * или «Пройти заново», когда всё отмечено.
+ */
 export default function StartButton({ taskIds }: StartButtonProps) {
   const { done } = useDoneSet();
-  const next = taskIds.find((id) => !done.has(id)) ?? taskIds[0];
-  const started = done.size > 0;
-  if (!next) return null;
+  const next = taskIds.find((id) => !done.has(id)) ?? null;
+  const first = taskIds[0];
+  if (!first) return null;
+  const label = next === null ? t.home.restart : done.size > 0 ? t.home.resume(next) : t.home.start;
   return (
     <Link
-      href={`/task/${next}`}
+      href={`/task/${next ?? first}`}
       className="group inline-flex h-12 items-center gap-3 bg-accent px-7 font-semibold text-accent-fg transition-colors hover:bg-ink hover:text-paper"
     >
-      <span>{started ? t.home.resume(next) : t.home.start}</span>
+      <span>{label}</span>
       <svg
         className="transition-transform group-hover:translate-x-1"
         width="18"

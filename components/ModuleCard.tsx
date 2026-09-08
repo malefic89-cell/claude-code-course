@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Module } from "@/lib/content";
 import { duration, moduleNumber, t } from "@/lib/i18n";
+import ModuleIcon from "@/components/ModuleIcon";
 import ProgressBar from "@/components/ProgressBar";
 import { useDoneSet } from "@/components/useDoneSet";
 
@@ -35,8 +36,11 @@ export default function ModuleCard({ module: mod, minutes }: ModuleCardProps) {
         {moduleNumber(mod.id).padStart(2, "0")}
       </span>
       <span className="flex min-w-0 flex-col gap-2">
-        <span className="font-serif text-2xl font-medium leading-tight group-hover:text-accent">
-          {mod.title}
+        <span className="flex items-center gap-3">
+          <span className="font-serif text-2xl font-medium leading-tight group-hover:text-accent">
+            {mod.title}
+          </span>
+          <ModuleIcon name={mod.icon} className="h-5 w-5 shrink-0 text-dim group-hover:text-accent" />
         </span>
         <span className="text-[15px] leading-relaxed text-body">{mod.description}</span>
       </span>

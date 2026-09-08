@@ -57,6 +57,7 @@ export const t = {
       "Каждая задача выполняется в вашем терминале и заканчивается проверяемым результатом. Опыт разработки не требуется: терминал и git разбираются в модуле 0, с него и начинаем.",
     start: "Начать курс",
     resume: (taskId: string): string => `Продолжить · ${taskId}`,
+    restart: "Пройти заново",
     viewProgramme: "Посмотреть программу",
     progressTitle: "Ваш прогресс",
     progressOf: (total: number): string => `из ${total} ${pluralRu(total, "задачи", "задач", "задач")}`,
@@ -75,7 +76,7 @@ export const t = {
     taskCount: (n: number): string => `${n} ${tasksWord(n)}`,
     backToModules: "← Все модули",
     remaining: (done: number, total: number, minutesLeft: number): string =>
-      minutesLeft > 0
+      done < total
         ? `${done} из ${total} · ${duration(minutesLeft)} осталось`
         : `${done} из ${total} · модуль пройден`,
   },
