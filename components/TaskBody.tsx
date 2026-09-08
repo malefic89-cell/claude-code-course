@@ -60,14 +60,14 @@ export default function TaskBody({ body, footer }: TaskBodyProps) {
           const kind = kindOf(s.heading);
           if (kind === "goal") {
             return (
-              <div key={i} className="border-l-2 border-accent pl-5 text-lg leading-relaxed text-body [&>p]:mt-0">
+              <div key={i} className="border-l-2 border-accent pl-5 text-lg leading-relaxed text-body [&>p:first-child]:mt-0">
                 <Markdown>{s.content}</Markdown>
               </div>
             );
           }
           if (kind === "steps") {
             return (
-              <div key={i} className="task-steps [&>ol]:mt-0">
+              <div key={i} className="task-steps [&>ol:first-child]:mt-0">
                 <Markdown>{s.content}</Markdown>
               </div>
             );

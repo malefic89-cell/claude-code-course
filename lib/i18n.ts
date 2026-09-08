@@ -66,7 +66,7 @@ export const t = {
     programmeNote: "Модуль 0 обязателен, остальные — в любом порядке",
     moduleNotStarted: (n: number): string => `${n} ${tasksWord(n)} · не начат`,
     moduleInProgress: (done: number, total: number, nextId: string): string =>
-      `${done} из ${total} ${tasksWord(total)} · продолжить с ${nextId}`,
+      `${done} из ${total} ${pluralRu(total, "задачи", "задач", "задач")} · продолжить с ${nextId}`,
     moduleComplete: (n: number): string => `${n} ${tasksWord(n)} · пройден`,
   },
 

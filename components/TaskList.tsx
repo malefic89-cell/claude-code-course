@@ -54,7 +54,7 @@ export default function TaskList({ tasks }: TaskListProps) {
                 {task.id}
               </span>
               <span
-                className={`col-span-3 col-start-2 text-base sm:col-span-1 sm:col-start-3 ${
+                className={`col-span-2 col-start-2 text-base sm:col-span-1 sm:col-start-3 ${
                   isDone ? "text-muted line-through" : isCurrent ? "font-semibold" : ""
                 } group-hover:text-accent`}
               >
