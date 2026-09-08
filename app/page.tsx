@@ -22,7 +22,7 @@ export default function Home() {
   );
   const allTasks = tasksByModule.flat();
   return (
-    <main className="max-w-5xl">
+    <main className="page-in max-w-5xl">
       <section className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[7fr_5fr] lg:items-end lg:gap-16">
         <div className="flex flex-col gap-6">
           <p className="font-mono text-xs uppercase tracking-wider text-accent">

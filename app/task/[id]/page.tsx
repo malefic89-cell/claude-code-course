@@ -4,7 +4,7 @@ import { getAdjacentTaskIds, getModules, getTask } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import DifficultyBadge from "@/components/DifficultyBadge";
 import TaskBody from "@/components/TaskBody";
-import TaskDoneButton from "@/components/TaskDoneButton";
+import TaskCompletion from "@/components/TaskCompletion";
 
 export function generateStaticParams() {
   return getModules().flatMap((m) => m.tasks.map((id) => ({ id })));
@@ -17,20 +17,20 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
   const { prev, next } = getAdjacentTaskIds(task.id);
   const prevTask = prev ? getTask(prev) : null;
   const nextTask = next ? getTask(next) : null;
+  const modules = getModules();
+  const moduleIndex = modules.findIndex((m) => m.id === task.module);
+  const moduleTaskIds = modules[moduleIndex]?.tasks ?? [];
+  const nextModule = modules[moduleIndex + 1] ?? null;
 
   const footer = (
     <>
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
-        <TaskDoneButton taskId={task.id} />
-        {nextTask && (
-          <Link
-            href={`/task/${nextTask.id}`}
-            className="border-b border-muted text-[15px] text-muted hover:border-ink hover:text-ink"
-          >
-            {t.task.nextTask}: {nextTask.id}
-          </Link>
-        )}
-      </div>
+      <TaskCompletion
+        taskId={task.id}
+        moduleId={task.module}
+        moduleTaskIds={moduleTaskIds}
+        nextTaskId={nextTask?.id ?? null}
+        nextModule={nextModule ? { id: nextModule.id, title: nextModule.title } : null}
+      />
       <nav className="flex justify-between gap-6 border-t border-line pt-5 text-sm">
         {prevTask ? (
           <Link href={`/task/${prevTask.id}`} className="group min-w-0">
@@ -57,7 +57,7 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
   );
 
   return (
-    <main className="max-w-5xl py-8 sm:py-12">
+    <main className="page-in max-w-5xl py-8 sm:py-12">
       <Link
         href={`/module/${task.module}`}
         className="font-mono text-xs uppercase tracking-wider text-muted hover:text-ink"

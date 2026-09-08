@@ -87,6 +87,10 @@ export const t = {
     nextTask: "Следующая",
     marginTitle: "На полях",
     hintsSummary: "Подсказки",
+    moduleCompleteEyebrow: "Готово",
+    moduleCompleteTitle: (moduleId: string): string => `Модуль ${moduleNumber(moduleId)} пройден`,
+    moduleCompleteNext: (n: string, title: string): string => `Дальше: модуль ${n}. ${title}`,
+    courseComplete: "Это был последний модуль. Курс пройден целиком.",
   },
 
   difficulty: {

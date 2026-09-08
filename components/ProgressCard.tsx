@@ -19,7 +19,7 @@ export default function ProgressCard({ tasks }: ProgressCardProps) {
     <section className="flex flex-col gap-3 border border-accent-line bg-accent-soft p-6 sm:p-7">
       <h2 className="font-mono text-xs uppercase tracking-wider text-accent">{t.home.progressTitle}</h2>
       <p className="flex items-baseline gap-2.5">
-        <span className="font-numeral text-5xl font-bold leading-none sm:text-6xl">{doneCount}</span>
+        <span key={doneCount} className="page-in font-numeral text-5xl font-bold leading-none sm:text-6xl">{doneCount}</span>
         <span className="text-lg text-muted">{t.home.progressOf(tasks.length)}</span>
       </p>
       <ProgressBar value={doneCount} max={tasks.length} track="white" />

@@ -51,3 +51,47 @@ body {
     text-wrap: balance;
   }
 }
+
+/* ---- Движение. Всё отключается при prefers-reduced-motion. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  /* Страница «переворачивается»: лёгкий подъём с проявлением. */
+  @keyframes page-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page-in {
+    animation: page-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Галочка прорисовывается штрихом. */
+  @keyframes check-draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  .check-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .check-draw[data-animate="true"] {
+    animation: check-draw 380ms cubic-bezier(0.2, 0.7, 0.2, 1) 80ms both;
+  }
+
+  /* Кнопка при отметке слегка «припечатывается». */
+  @keyframes stamp {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+  }
+  .stamp {
+    animation: stamp 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Баннер «модуль пройден» поднимается снизу. */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rise {
+    animation: rise 520ms cubic-bezier(0.2, 0.7, 0.2, 1) 120ms both;
+  }
+}

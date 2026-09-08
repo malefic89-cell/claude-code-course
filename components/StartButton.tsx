@@ -18,10 +18,11 @@ export default function StartButton({ taskIds }: StartButtonProps) {
   return (
     <Link
       href={`/task/${next}`}
-      className="inline-flex h-12 items-center gap-3 bg-accent px-7 font-semibold text-white transition-colors hover:bg-ink"
+      className="group inline-flex h-12 items-center gap-3 bg-accent px-7 font-semibold text-white transition-colors hover:bg-ink"
     >
       <span>{started ? t.home.resume(next) : t.home.start}</span>
       <svg
+        className="transition-transform group-hover:translate-x-1"
         width="18"
         height="18"
         viewBox="0 0 24 24"

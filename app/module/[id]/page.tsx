@@ -25,7 +25,7 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
     }),
   );
   return (
-    <main className="max-w-5xl py-8 sm:py-12">
+    <main className="page-in max-w-5xl py-8 sm:py-12">
       <Link href="/" className="font-mono text-xs uppercase tracking-wider text-muted hover:text-ink">
         {t.module.backToModules}
       </Link>

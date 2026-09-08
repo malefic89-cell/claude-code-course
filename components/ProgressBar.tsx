@@ -21,7 +21,7 @@ export default function ProgressBar({ value, max, track = "faint" }: ProgressBar
       aria-valuemax={max}
       className={`h-1 w-full ${track === "white" ? "bg-white" : "bg-faint"}`}
     >
-      <div className="h-full bg-accent transition-[width] duration-300" style={{ width: `${percent}%` }} />
+      <div className="h-full bg-accent transition-[width] duration-700 ease-out" style={{ width: `${percent}%` }} />
     </div>
   );
 }
