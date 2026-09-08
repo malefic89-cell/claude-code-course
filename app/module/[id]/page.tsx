@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getModule, getModuleTasks, getModules, type TaskMeta } from "@/lib/content";
-import { t } from "@/lib/i18n";
+import { moduleNumber, t } from "@/lib/i18n";
+import ModuleSummary from "@/components/ModuleSummary";
 import TaskList from "@/components/TaskList";
 
 export function generateStaticParams() {
@@ -24,14 +25,19 @@ export default async function ModulePage({ params }: { params: Promise<{ id: str
     }),
   );
   return (
-    <main className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
-      <Link href="/" className="text-sm text-gray-500 hover:underline">
+    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-10 sm:py-12 lg:px-16">
+      <Link href="/" className="font-mono text-xs uppercase tracking-wider text-muted hover:text-ink">
         {t.module.backToModules}
       </Link>
-      <h1 className="mt-2 text-2xl font-bold">{t.module.heading(mod.id, mod.title)}</h1>
-      <p className="mt-1 text-gray-600">{mod.description}</p>
-      <p className="mt-1 text-xs text-gray-400">{t.module.taskCount(tasks.length)}</p>
-      <div className="mt-6">
+      <div className="mt-6 grid gap-10 lg:grid-cols-[18rem_1fr] lg:gap-16">
+        <header className="flex flex-col gap-4">
+          <p className="font-serif text-7xl font-bold leading-[0.9] text-accent sm:text-8xl">
+            {moduleNumber(mod.id).padStart(2, "0")}
+          </p>
+          <h1 className="font-serif text-3xl font-medium leading-tight">{mod.title}</h1>
+          <p className="text-[15px] leading-relaxed text-body">{mod.description}</p>
+          <ModuleSummary tasks={tasks} />
+        </header>
         <TaskList tasks={tasks} />
       </div>
     </main>
