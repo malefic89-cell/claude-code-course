@@ -51,7 +51,7 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <head>
         {/* Тема выставляется до первой отрисовки, чтобы страница не мигала белым. */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className={`${serif.variable} ${numeral.variable} ${sans.variable} ${mono.variable} antialiased`}>
         <header className="border-b-2 border-ink">

@@ -63,6 +63,7 @@ export const t = {
     progressOf: (total: number): string => `из ${total} ${pluralRu(total, "задачи", "задач", "задач")}`,
     progressNext: (taskId: string, title: string): string => `Следующая: ${taskId}. ${title}`,
     progressDone: "Курс пройден целиком.",
+    percent: (p: number): string => `${p}%`,
     programmeTitle: "Программа",
     programmeNote: "Модуль 0 обязателен, остальные — в любом порядке",
     moduleNotStarted: (n: number): string => `${n} ${tasksWord(n)} · не начат`,
@@ -72,8 +73,6 @@ export const t = {
   },
 
   module: {
-    heading: (id: string, title: string): string => `Модуль ${moduleNumber(id)}. ${title}`,
-    taskCount: (n: number): string => `${n} ${tasksWord(n)}`,
     backToModules: "← Все модули",
     remaining: (done: number, total: number, minutesLeft: number): string =>
       done < total

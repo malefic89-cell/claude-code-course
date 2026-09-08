@@ -21,6 +21,9 @@ export default function ProgressCard({ tasks }: ProgressCardProps) {
       <p className="flex items-baseline gap-2.5">
         <span key={doneCount} className="page-in font-numeral text-5xl font-bold leading-none sm:text-6xl">{doneCount}</span>
         <span className="text-lg text-muted">{t.home.progressOf(tasks.length)}</span>
+        <span className="ml-auto font-mono text-sm text-muted">
+          {t.home.percent(tasks.length > 0 ? Math.round((doneCount / tasks.length) * 100) : 0)}
+        </span>
       </p>
       <ProgressBar value={doneCount} max={tasks.length} track="paper" />
       <p className="text-[15px] leading-snug text-body">

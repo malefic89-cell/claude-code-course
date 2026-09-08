@@ -32,17 +32,20 @@ export default function TaskCompletion({
   const { done } = useDoneSet();
   const isDone = done.has(taskId);
   // Анимируем только отметку, сделанную на этой странице, а не состояние из хранилища.
-  const [justDone, setJustDone] = useState(false);
+  // «Нажали» само по себе не значит «сохранилось»: анимация идёт от фактического isDone,
+  // так что при недоступном localStorage галочка не рисуется впустую.
+  const [clicked, setClicked] = useState(false);
+  const justDone = clicked && isDone;
   const moduleComplete = moduleTaskIds.every((id) => done.has(id));
-  const showBanner = justDone && isDone && moduleComplete;
+  const showBanner = justDone && moduleComplete;
 
   const toggle = () => {
     if (isDone) {
       unmarkDone(taskId);
-      setJustDone(false);
+      setClicked(false);
     } else {
       markDone(taskId);
-      setJustDone(true);
+      setClicked(true);
     }
   };
 

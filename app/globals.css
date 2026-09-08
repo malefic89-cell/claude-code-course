@@ -27,6 +27,32 @@
   color-scheme: light;
 }
 
+/*
+ * Тёмные значения объявлены дважды: для явного выбора (data-theme="dark")
+ * и как запасной вариант по системной настройке, когда скрипт темы не выполнился
+ * (JS отключён) и атрибута нет вовсе. Менять оба блока синхронно.
+ */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --paper: #131118;
+    --ink: #f1eef5;
+    --body: #cfc9d6;
+    --muted: #9a93a3;
+    --dim: #4a4552;
+    --line: #2a2630;
+    --faint: #1e1a25;
+    --accent: #9d7bff;
+    --accent-fg: #120c24;
+    --accent-soft: #221b38;
+    --accent-line: #4b3a80;
+    --code-bg: #1e1a25;
+    --code-fg: #f1eef5;
+    --warn: #f0a94a;
+    --danger: #fb7185;
+    color-scheme: dark;
+  }
+}
+
 html[data-theme="dark"] {
   --paper: #131118;
   --ink: #f1eef5;

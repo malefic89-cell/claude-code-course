@@ -51,10 +51,38 @@ function emit(): void {
   listeners.forEach((l) => l());
 }
 
+function hasSavedChoice(): boolean {
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    return saved === "light" || saved === "dark";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Подписка на изменения темы: свои переключения, смена системной темы
+ * (пока нет сохранённого выбора) и выбор в другой вкладке.
+ */
 export function subscribe(listener: () => void): () => void {
   listeners.add(listener);
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const onMedia = () => {
+    if (hasSavedChoice()) return;
+    document.documentElement.dataset.theme = systemTheme();
+    listener();
+  };
+  const onStorage = (e: StorageEvent) => {
+    if (e.key !== null && e.key !== STORAGE_KEY) return;
+    document.documentElement.dataset.theme = readTheme();
+    listener();
+  };
+  media.addEventListener("change", onMedia);
+  window.addEventListener("storage", onStorage);
   return () => {
     listeners.delete(listener);
+    media.removeEventListener("change", onMedia);
+    window.removeEventListener("storage", onStorage);
   };
 }
 
