@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAdjacentTaskIds, getModules, getTask } from "@/lib/content";
-import { t } from "@/lib/i18n";
+import { moduleNumber, t } from "@/lib/i18n";
 import DifficultyBadge from "@/components/DifficultyBadge";
 import TaskBody from "@/components/TaskBody";
 import TaskCompletion from "@/components/TaskCompletion";
@@ -35,7 +35,10 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
         {prevTask ? (
           <Link href={`/task/${prevTask.id}`} className="group min-w-0">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted">
-              ← {t.task.prevTask}
+              ←{" "}
+              {prevTask.module === task.module
+                ? t.task.prevTask
+                : t.task.prevInModule(moduleNumber(prevTask.module))}
             </span>
             <span className="block truncate text-body group-hover:text-accent">{prevTask.title}</span>
           </Link>
@@ -45,7 +48,10 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
         {nextTask ? (
           <Link href={`/task/${nextTask.id}`} className="group min-w-0 text-right">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted">
-              {t.task.nextTask} →
+              {nextTask.module === task.module
+                ? t.task.nextTask
+                : t.task.nextInModule(moduleNumber(nextTask.module))}{" "}
+              →
             </span>
             <span className="block truncate text-body group-hover:text-accent">{nextTask.title}</span>
           </Link>

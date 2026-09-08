@@ -54,7 +54,7 @@ export const t = {
     titleEmphasis: "освоенный руками",
     titleEnd: ", а не по видео.",
     intro:
-      "Каждая задача выполняется в вашем терминале и заканчивается проверяемым результатом. Опыт разработки не требуется: git, командная строка и пути объясняются в момент, когда они нужны.",
+      "Каждая задача выполняется в вашем терминале и заканчивается проверяемым результатом. Опыт разработки не требуется: терминал и git разбираются в модуле 0, с него и начинаем.",
     start: "Начать курс",
     resume: (taskId: string): string => `Продолжить · ${taskId}`,
     viewProgramme: "Посмотреть программу",
@@ -63,7 +63,7 @@ export const t = {
     progressNext: (taskId: string, title: string): string => `Следующая: ${taskId}. ${title}`,
     progressDone: "Курс пройден целиком.",
     programmeTitle: "Программа",
-    programmeNote: "Модули открыты в любом порядке",
+    programmeNote: "Модуль 0 обязателен, остальные — в любом порядке",
     moduleNotStarted: (n: number): string => `${n} ${tasksWord(n)} · не начат`,
     moduleInProgress: (done: number, total: number, nextId: string): string =>
       `${done} из ${total} ${tasksWord(total)} · продолжить с ${nextId}`,
@@ -90,6 +90,9 @@ export const t = {
     unmarkDone: "Выполнено — снять отметку",
     prevTask: "Предыдущая",
     nextTask: "Следующая",
+    /** Подпись соседней задачи из другого модуля: «Следующая · модуль 1». */
+    prevInModule: (n: string): string => `Предыдущая · модуль ${n}`,
+    nextInModule: (n: string): string => `Следующая · модуль ${n}`,
     marginTitle: "На полях",
     hintsSummary: "Подсказки",
     moduleCompleteEyebrow: "Готово",

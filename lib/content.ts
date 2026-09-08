@@ -110,14 +110,20 @@ export function getModuleTasks(moduleId: string): Task[] {
     .filter((t): t is Task => t !== null);
 }
 
-/** Сосед задачи для навигации «предыдущая/следующая». */
+/** Все задачи курса в порядке прохождения: модули по id, внутри — по списку модуля. */
+export function getCourseOrder(): string[] {
+  return getModules().flatMap((m) => m.tasks);
+}
+
+/**
+ * Сосед задачи для навигации «предыдущая/следующая».
+ * Порядок сквозной: за последней задачей модуля идёт первая задача следующего.
+ */
 export function getAdjacentTaskIds(taskId: string): {
   prev: string | null;
   next: string | null;
 } {
-  const task = getTask(taskId);
-  if (!task) return { prev: null, next: null };
-  const order = getModule(task.module)?.tasks ?? [];
+  const order = getCourseOrder();
   const i = order.indexOf(taskId);
   return {
     prev: i > 0 ? order[i - 1] : null,
