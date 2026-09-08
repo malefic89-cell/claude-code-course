@@ -35,6 +35,12 @@ export const t = {
     programme: "Программа",
   },
 
+  rail: {
+    title: "Карта курса",
+    total: (done: number, total: number): string =>
+      `${done} из ${total} ${pluralRu(total, "задачи", "задач", "задач")}`,
+  },
+
   home: {
     eyebrow: (modules: number, tasks: number): string =>
       `Практический курс · ${modules} ${pluralRu(modules, "модуль", "модуля", "модулей")} · ${tasks} ${tasksWord(tasks)}`,
