@@ -17,45 +17,66 @@ export default async function TaskPage({ params }: { params: Promise<{ id: strin
   const { prev, next } = getAdjacentTaskIds(task.id);
   const prevTask = prev ? getTask(prev) : null;
   const nextTask = next ? getTask(next) : null;
-  return (
-    <main className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
-      <Link href={`/module/${task.module}`} className="text-sm text-gray-500 hover:underline">
-        {t.task.backToModule(task.module)}
-      </Link>
-      <h1 className="mt-2 text-xl font-bold sm:text-2xl">
-        {task.id}. {task.title}
-      </h1>
-      <p className="mt-2 flex items-center gap-2 text-xs text-gray-400">
-        <DifficultyBadge difficulty={task.difficulty} />
-        {t.task.minutes(task.estimated_minutes)}
-      </p>
-      <div className="mt-4">
-        <TaskBody body={task.body} />
-      </div>
-      <div className="mt-8">
+
+  const footer = (
+    <>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
         <TaskDoneButton taskId={task.id} />
+        {nextTask && (
+          <Link
+            href={`/task/${nextTask.id}`}
+            className="border-b border-muted text-[15px] text-muted hover:border-ink hover:text-ink"
+          >
+            {t.task.nextTask}: {nextTask.id}
+          </Link>
+        )}
       </div>
-      <nav className="mt-8 flex justify-between gap-4 border-t pt-4 text-sm">
+      <nav className="flex justify-between gap-6 border-t border-line pt-5 text-sm">
         {prevTask ? (
-          <Link href={`/task/${prevTask.id}`} className="min-w-0 text-gray-600 hover:underline">
-            <span className="block text-xs text-gray-400">{t.task.prevTask}</span>
-            <span className="block truncate">{prevTask.title}</span>
+          <Link href={`/task/${prevTask.id}`} className="group min-w-0">
+            <span className="block font-mono text-xs uppercase tracking-wider text-muted">
+              ← {t.task.prevTask}
+            </span>
+            <span className="block truncate text-body group-hover:text-accent">{prevTask.title}</span>
           </Link>
         ) : (
           <span />
         )}
         {nextTask ? (
-          <Link
-            href={`/task/${nextTask.id}`}
-            className="min-w-0 text-right text-gray-600 hover:underline"
-          >
-            <span className="block text-xs text-gray-400">{t.task.nextTask}</span>
-            <span className="block truncate">{nextTask.title}</span>
+          <Link href={`/task/${nextTask.id}`} className="group min-w-0 text-right">
+            <span className="block font-mono text-xs uppercase tracking-wider text-muted">
+              {t.task.nextTask} →
+            </span>
+            <span className="block truncate text-body group-hover:text-accent">{nextTask.title}</span>
           </Link>
         ) : (
           <span />
         )}
       </nav>
+    </>
+  );
+
+  return (
+    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-10 sm:py-12 lg:px-16">
+      <Link
+        href={`/module/${task.module}`}
+        className="font-mono text-xs uppercase tracking-wider text-muted hover:text-ink"
+      >
+        {t.task.backToModule(task.module)}
+      </Link>
+      <header className="mt-6 flex flex-col gap-5">
+        <p className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs uppercase tracking-wider text-muted">
+          <span className="text-accent">{t.task.eyebrow(task.module, task.id)}</span>
+          <DifficultyBadge difficulty={task.difficulty} />
+          <span>{t.task.minutes(task.estimated_minutes)}</span>
+        </p>
+        <h1 className="font-serif text-3xl font-medium leading-tight sm:text-4xl lg:text-[42px]">
+          {task.title}
+        </h1>
+      </header>
+      <div className="mt-8">
+        <TaskBody body={task.body} footer={footer} />
+      </div>
     </main>
   );
 }

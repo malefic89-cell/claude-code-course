@@ -24,13 +24,26 @@ export default function TaskDoneButton({ taskId }: TaskDoneButtonProps) {
       type="button"
       onClick={toggle}
       aria-pressed={isDone}
-      className={`w-full rounded-xl px-4 py-3 font-semibold transition-colors sm:w-auto ${
+      className={`inline-flex h-12 w-full items-center justify-center gap-3 px-7 font-semibold transition-colors sm:w-auto ${
         isDone
-          ? "border border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-          : "bg-emerald-600 text-white hover:bg-emerald-700"
+          ? "border border-ink bg-white text-ink hover:border-accent hover:text-accent"
+          : "bg-accent text-white hover:bg-ink"
       }`}
     >
-      {isDone ? t.task.unmarkDone : t.task.markDone}
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M5 12l5 5L20 7" />
+      </svg>
+      <span>{isDone ? t.task.unmarkDone : t.task.markDone}</span>
     </button>
   );
 }
