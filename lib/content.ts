@@ -117,6 +117,17 @@ export function getModuleTasks(moduleId: string): Task[] {
     .filter((t): t is Task => t !== null);
 }
 
+/** Путь к тёмному варианту картинки из контента: /screenshots/x.png → /screenshots/x-dark.png. */
+export function darkVariant(src: string): string {
+  return src.replace(/(\.[a-z0-9]+)$/i, "-dark$1");
+}
+
+/** Есть ли в public/ тёмный вариант картинки (проверяется при сборке). */
+export function hasDarkVariant(src: string): boolean {
+  if (!src.startsWith("/")) return false;
+  return fs.existsSync(path.join(process.cwd(), "public", darkVariant(src)));
+}
+
 /** Все задачи курса в порядке прохождения: модули по id, внутри — по списку модуля. */
 export function getCourseOrder(): string[] {
   return getModules().flatMap((m) => m.tasks);

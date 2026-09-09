@@ -166,3 +166,27 @@ body {
     animation: cursor-blink 1.6s steps(1) infinite;
   }
 }
+
+/*
+ * Скриншоты в тёмной теме: инверсия с поворотом оттенка. Для терминальных
+ * кадров (текст на ровном фоне) даёт вид тёмного терминала, синие команды
+ * остаются синими. Если для кадра есть отдельный тёмный файл (суффикс -dark),
+ * рендер подставляет его и инверсия не применяется (data-invert="false").
+ */
+html[data-theme="dark"] .screenshot[data-invert="true"] {
+  filter: invert(0.92) hue-rotate(180deg);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .screenshot[data-invert="true"] {
+    filter: invert(0.92) hue-rotate(180deg);
+  }
+}
+
+/* Пара кадров light/dark: показывается один, по теме. */
+.screenshot-dark { display: none; }
+html[data-theme="dark"] .screenshot-light { display: none; }
+html[data-theme="dark"] .screenshot-dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .screenshot-light { display: none; }
+  html:not([data-theme]) .screenshot-dark { display: block; }
+}

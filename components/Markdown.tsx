@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { darkVariant, hasDarkVariant } from "@/lib/content";
 
 /** Абсолютный путь из контента → с basePath сайта (GitHub Pages живёт в подпапке). */
 function withBasePath(src: string): string {
@@ -43,20 +44,32 @@ export default function Markdown({ children }: MarkdownProps) {
         },
         // Скриншот: рамка в цвет линеек, подпись из alt мелким моноширинным.
         // react-markdown кладёт <img> внутрь <p>; figure внутри p невалиден, поэтому span.
-        img: ({ src, alt }) => (
-          <span className="mt-4 block">
-            {/* eslint-disable-next-line @next/next/no-img-element -- статический экспорт, без оптимизатора */}
-            <img
-              src={typeof src === "string" ? withBasePath(src) : undefined}
-              alt={alt ?? ""}
-              loading="lazy"
-              className="block w-full border border-line"
-            />
-            {alt && (
+        img: ({ src, alt }) => {
+          const path = typeof src === "string" ? src : "";
+          // Отдельный тёмный кадр (суффикс -dark) — показываем его в тёмной теме;
+          // иначе тот же кадр инвертируется через CSS.
+          const dark = hasDarkVariant(path) ? withBasePath(darkVariant(path)) : null;
+          const frame = "block w-full border border-line";
+          return (
+            <span className="mt-4 block">
+              {/* eslint-disable-next-line @next/next/no-img-element -- статический экспорт, без оптимизатора */}
+              <img
+                src={withBasePath(path)}
+                alt={alt ?? ""}
+                loading="lazy"
+                data-invert={dark ? "false" : "true"}
+                className={`screenshot ${dark ? "screenshot-light" : ""} ${frame}`}
+              />
+              {dark && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={dark} alt={alt ?? ""} loading="lazy" className={`screenshot screenshot-dark ${frame}`} />
+              )}
+              {alt && (
               <span className="mt-2 block font-mono text-xs text-muted">{alt}</span>
-            )}
-          </span>
-        ),
+              )}
+            </span>
+          );
+        },
         blockquote: (props) => (
           <blockquote className="mt-3 border-l-2 border-ink pl-4 text-body" {...props} />
         ),
