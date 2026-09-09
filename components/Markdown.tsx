@@ -1,6 +1,12 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+/** Абсолютный путь из контента → с basePath сайта (GitHub Pages живёт в подпапке). */
+function withBasePath(src: string): string {
+  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  return src.startsWith("/") ? `${base}${src}` : src;
+}
+
 interface MarkdownProps {
   children: string;
 }
@@ -35,6 +41,22 @@ export default function Markdown({ children }: MarkdownProps) {
             <code className="bg-accent-soft px-1.5 py-0.5 font-mono text-[0.9em]" {...props} />
           );
         },
+        // Скриншот: рамка в цвет линеек, подпись из alt мелким моноширинным.
+        // react-markdown кладёт <img> внутрь <p>; figure внутри p невалиден, поэтому span.
+        img: ({ src, alt }) => (
+          <span className="mt-4 block">
+            {/* eslint-disable-next-line @next/next/no-img-element -- статический экспорт, без оптимизатора */}
+            <img
+              src={typeof src === "string" ? withBasePath(src) : undefined}
+              alt={alt ?? ""}
+              loading="lazy"
+              className="block w-full border border-line"
+            />
+            {alt && (
+              <span className="mt-2 block font-mono text-xs text-muted">{alt}</span>
+            )}
+          </span>
+        ),
         blockquote: (props) => (
           <blockquote className="mt-3 border-l-2 border-ink pl-4 text-body" {...props} />
         ),

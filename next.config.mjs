@@ -7,6 +7,9 @@ const nextConfig = {
   // Сайт живёт на malefic89-cell.github.io/claude-code-course/.
   // В dev basePath не нужен — локально приложение остаётся на корне.
   basePath: isProd ? "/claude-code-course" : "",
+  // Тот же префикс для абсолютных путей в контенте (картинки в Markdown): Next
+  // подставляет basePath только в Link и next/image, а не в обычные <img src="/…">.
+  env: { NEXT_PUBLIC_BASE_PATH: isProd ? "/claude-code-course" : "" },
   // Каждая страница — папка с index.html: надёжные URL на статическом хостинге.
   trailingSlash: true,
 };
