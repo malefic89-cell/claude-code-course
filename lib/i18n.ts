@@ -93,7 +93,6 @@ export const t = {
     /** Подпись соседней задачи из другого модуля: «Следующая · модуль 1». */
     prevInModule: (n: string): string => `Предыдущая · модуль ${n}`,
     nextInModule: (n: string): string => `Следующая · модуль ${n}`,
-    marginTitle: "На полях",
     hintsSummary: "Подсказки",
     moduleCompleteEyebrow: "Готово",
     moduleCompleteTitle: (moduleId: string): string => `Модуль ${moduleNumber(moduleId)} пройден`,

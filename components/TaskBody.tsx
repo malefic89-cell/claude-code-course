@@ -94,11 +94,10 @@ export default function TaskBody({ body, footer }: TaskBodyProps) {
         {footer}
       </div>
       {hints.length > 0 && (
-        <aside className="border-t border-line pt-6 text-[15px] text-body lg:border-l lg:border-t-0 lg:pl-7 lg:pt-2">
-          <p className="font-mono text-xs uppercase tracking-wider text-muted">{t.task.marginTitle}</p>
+        <aside className="border-t border-line pt-6 text-[15px] text-body lg:border-l lg:border-t-0 lg:pl-7 lg:pt-1">
           {hints.map((s, i) => (
-            <details key={i} className="mt-4">
-              <summary className="cursor-pointer select-none font-semibold text-ink hover:text-accent">
+            <details key={i}>
+              <summary className="cursor-pointer select-none font-serif text-xl font-medium text-ink hover:text-accent">
                 {t.task.hintsSummary}
               </summary>
               <div className="[&_ul]:list-none [&_ul]:space-y-4 [&_ul]:pl-0 [&_li]:leading-relaxed">
