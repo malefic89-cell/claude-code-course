@@ -21,29 +21,41 @@ $files = Get-ChildItem -Path $dir -Filter $Pattern -File
 foreach ($file in $files) {
   $bmp = [System.Drawing.Bitmap]::FromFile($file.FullName)
   try {
-    $bg = $bmp.GetPixel(0, 0)
     $w = $bmp.Width; $h = $bmp.Height
+    # Фон терминала — цвет в центре кадра (там почти всегда пустое место),
+    # а не в углу: в углу может оказаться заголовок окна или панель задач.
+    $bg = $bmp.GetPixel([int]($w / 2), [int]($h / 2))
     $left = $w; $top = $h; $right = -1; $bottom = -1
+    $chrome = New-Object bool[] $h
 
+    # Строки, где больше половины пикселей не фон, — это «хром»: заголовок окна,
+    # панель задач, рамки. Текст терминала такие строки не заполняет. Их пропускаем.
     for ($y = 0; $y -lt $h; $y++) {
+      $rowLeft = $w; $rowRight = -1; $count = 0
       for ($x = 0; $x -lt $w; $x++) {
         $p = $bmp.GetPixel($x, $y)
         $d = [Math]::Abs($p.R - $bg.R) + [Math]::Abs($p.G - $bg.G) + [Math]::Abs($p.B - $bg.B)
         if ($d -gt 40) {
-          if ($x -lt $left) { $left = $x }
-          if ($x -gt $right) { $right = $x }
-          if ($y -lt $top) { $top = $y }
-          if ($y -gt $bottom) { $bottom = $y }
+          $count++
+          if ($x -lt $rowLeft) { $rowLeft = $x }
+          if ($x -gt $rowRight) { $rowRight = $x }
         }
       }
+      if ($count -gt ($w / 2)) { $chrome[$y] = $true; continue }
+      if ($count -eq 0) { continue }
+      if ($rowLeft -lt $left) { $left = $rowLeft }
+      if ($rowRight -gt $right) { $right = $rowRight }
+      if ($y -lt $top) { $top = $y }
+      if ($y -gt $bottom) { $bottom = $y }
     }
 
     if ($right -lt 0) { Write-Host "$($file.Name): пустой кадр, пропущен"; continue }
 
+    # Поля не должны залезать в «хром» (в заголовок окна сверху, в панель задач снизу).
+    $y0 = $top; while ($y0 -gt 0 -and ($top - $y0) -lt $Padding -and -not $chrome[$y0 - 1]) { $y0-- }
+    $y1 = $bottom; while ($y1 -lt ($h - 1) -and ($y1 - $bottom) -lt $Padding -and -not $chrome[$y1 + 1]) { $y1++ }
     $x0 = [Math]::Max(0, $left - $Padding)
-    $y0 = [Math]::Max(0, $top - $Padding)
     $x1 = [Math]::Min($w - 1, $right + $Padding)
-    $y1 = [Math]::Min($h - 1, $bottom + $Padding)
     # Не уже минимальной ширины: иначе узкие кадры растянутся на сайте сильнее широких.
     if (($x1 - $x0 + 1) -lt $MinWidth) { $x1 = [Math]::Min($w - 1, $x0 + $MinWidth - 1) }
 
