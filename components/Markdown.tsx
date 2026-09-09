@@ -56,13 +56,16 @@ export default function Markdown({ children }: MarkdownProps) {
         },
         // Скриншот: рамка в цвет линеек, подпись из alt мелким моноширинным.
         // react-markdown кладёт <img> внутрь <p>; figure внутри p невалиден, поэтому span.
-        img: ({ src, alt }) => {
+        img: ({ src, alt, title }) => {
           const path = typeof src === "string" ? src : "";
           // Отдельный тёмный кадр (суффикс -dark) — показываем его в тёмной теме;
-          // иначе тот же кадр инвертируется через CSS.
+          // иначе тот же кадр инвертируется через CSS. Кадры с графикой (логотипы,
+          // маскоты) инверсия перекрашивает — их помечают в Markdown заголовком
+          // "as-is": ![подпись](/screenshots/x.png "as-is"), они остаются светлыми.
           const dark = hasDarkVariant(path)
             ? withBasePath(darkVariant(path))
             : null;
+          const invert = !dark && title !== "as-is";
           const frame = "block w-full";
           return (
             <span className="mt-4 block">
@@ -73,7 +76,7 @@ export default function Markdown({ children }: MarkdownProps) {
                   src={withBasePath(path)}
                   alt={alt ?? ""}
                   loading="lazy"
-                  data-invert={dark ? "false" : "true"}
+                  data-invert={invert ? "true" : "false"}
                   className={`screenshot ${dark ? "screenshot-light" : ""} ${frame}`}
                 />
                 {dark && (
