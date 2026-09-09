@@ -32,6 +32,8 @@ export default function RootLayout({
         <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="antialiased">
+        {/* Фон-«бумага»: зерно и сетка точек в отступах, см. globals.css */}
+        <div aria-hidden="true" className="backdrop" />
         <header className="border-b-2 border-ink">
           <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 sm:px-10">
             <Link href="/" className="group flex items-center gap-2.5 font-serif text-xl font-bold hover:text-accent">

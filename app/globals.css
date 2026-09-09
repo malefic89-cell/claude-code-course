@@ -190,3 +190,28 @@ html[data-theme="dark"] .screenshot-dark { display: block; }
   html:not([data-theme]) .screenshot-light { display: none; }
   html:not([data-theme]) .screenshot-dark { display: block; }
 }
+
+/* ---- Фон «бумага»: зерно на весь лист и сетка точек, которая тает под текстовой колонкой. ---- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(var(--dim) 1px, transparent 1.2px);
+  background-size: 240px 240px, 28px 28px;
+  background-position: 0 0, 14px 14px;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.35) 25%, rgba(0, 0, 0, 0.35) 75%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.35) 25%, rgba(0, 0, 0, 0.35) 75%, #000 100%);
+}
+/* В тёмной теме зерно светлое: инвертируем слой. Два блока — как у токенов темы. */
+html[data-theme="dark"] .backdrop {
+  filter: invert(1);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .backdrop {
+    filter: invert(1);
+  }
+}
