@@ -4,8 +4,8 @@
 #   powershell -File scripts/crop-screenshots.ps1            # все PNG в public/screenshots
 #   powershell -File scripts/crop-screenshots.ps1 00-00-*.png # по маске
 #
-# Фон определяется по левому верхнему пикселю. Файлы, уже обрезанные (поля
-# меньше порога), пропускаются, так что скрипт можно запускать повторно.
+# Фон — самый частый цвет по сетке точек в кадре. Файлы, уже обрезанные (высота
+# почти не меняется), пропускаются, так что скрипт можно запускать повторно.
 
 param(
   [string]$Pattern = "*.png",
@@ -22,26 +22,38 @@ foreach ($file in $files) {
   $bmp = [System.Drawing.Bitmap]::FromFile($file.FullName)
   try {
     $w = $bmp.Width; $h = $bmp.Height
-    # Фон терминала — цвет в центре кадра (там почти всегда пустое место),
-    # а не в углу: в углу может оказаться заголовок окна или панель задач.
-    $bg = $bmp.GetPixel([int]($w / 2), [int]($h / 2))
+    # Фон терминала — самый частый цвет по сетке точек внутри кадра: один пиксель
+    # может попасть на заголовок окна или на цветную строку diff.
+    $votes = @{}
+    for ($i = 1; $i -le 9; $i++) {
+      for ($j = 1; $j -le 9; $j++) {
+        $s = $bmp.GetPixel([int]($w * $i / 10), [int]($h * $j / 10))
+        $k = "$($s.R),$($s.G),$($s.B)"
+        $votes[$k] = 1 + [int]$votes[$k]
+      }
+    }
+    $best = ($votes.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 1).Key -split ","
+    $bg = [System.Drawing.Color]::FromArgb([int]$best[0], [int]$best[1], [int]$best[2])
     $left = $w; $top = $h; $right = -1; $bottom = -1
     $chrome = New-Object bool[] $h
 
     # Строки, где больше половины пикселей не фон, — это «хром»: заголовок окна,
     # панель задач, рамки. Текст терминала такие строки не заполняет. Их пропускаем.
     for ($y = 0; $y -lt $h; $y++) {
-      $rowLeft = $w; $rowRight = -1; $count = 0
+      $rowLeft = $w; $rowRight = -1; $count = 0; $strong = 0
       for ($x = 0; $x -lt $w; $x++) {
         $p = $bmp.GetPixel($x, $y)
         $d = [Math]::Abs($p.R - $bg.R) + [Math]::Abs($p.G - $bg.G) + [Math]::Abs($p.B - $bg.B)
         if ($d -gt 40) {
           $count++
+          if ($d -gt 150) { $strong++ }
           if ($x -lt $rowLeft) { $rowLeft = $x }
           if ($x -gt $rowRight) { $rowRight = $x }
         }
       }
-      if ($count -gt ($w / 2)) { $chrome[$y] = $true; continue }
+      # «Хром» — только сильно отличающиеся строки (тёмный заголовок, панель задач).
+      # Светлая подложка строк diff отличается от фона слабо и хромом не считается.
+      if ($strong -gt ($w / 2)) { $chrome[$y] = $true; continue }
       if ($count -eq 0) { continue }
       if ($rowLeft -lt $left) { $left = $rowLeft }
       if ($rowRight -gt $right) { $right = $rowRight }
@@ -60,7 +72,9 @@ foreach ($file in $files) {
     if (($x1 - $x0 + 1) -lt $MinWidth) { $x1 = [Math]::Min($w - 1, $x0 + $MinWidth - 1) }
 
     $newW = $x1 - $x0 + 1; $newH = $y1 - $y0 + 1
-    if ($newW -ge $w - 4 -and $newH -ge $h - 4) { Write-Host "$($file.Name): уже обрезан"; continue }
+    # Полноэкранный кадр всегда сильно теряет в высоте (заголовок, панель задач).
+    # Если высота почти не меняется, кадр уже обрезан — ширину не трогаем.
+    if ($newH -ge $h - 24) { Write-Host "$($file.Name): уже обрезан"; continue }
 
     $rect = New-Object System.Drawing.Rectangle $x0, $y0, $newW, $newH
     $cropped = $bmp.Clone($rect, $bmp.PixelFormat)
