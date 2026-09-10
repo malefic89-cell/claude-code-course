@@ -90,7 +90,7 @@ export default function Markdown({ children }: MarkdownProps) {
                 )}
               </span>
               {alt && (
-                <span className="mt-2 block font-mono text-xs text-muted">
+                <span className="mt-2 block text-sm italic leading-snug text-muted">
                   {alt}
                 </span>
               )}

@@ -56,7 +56,7 @@ export default function CourseRail({ modules }: CourseRailProps) {
                     {moduleNumber(mod.id).padStart(2, "0")}
                   </span>
                   <span
-                    className={`min-w-0 flex-1 truncate text-[15px] leading-tight group-hover:text-accent ${isActive ? "font-semibold" : ""}`}
+                    className={`min-w-0 flex-1 text-[15px] leading-tight group-hover:text-accent ${isActive ? "font-semibold" : ""}`}
                   >
                     {mod.title}
                   </span>
@@ -76,16 +76,16 @@ export default function CourseRail({ modules }: CourseRailProps) {
                         <Link
                           href={`/task/${task.id}`}
                           aria-current={isCurrent ? "page" : undefined}
-                          className={`flex items-center gap-2 text-[13px] leading-snug hover:text-accent ${
+                          className={`flex items-start gap-2 text-[13px] leading-snug hover:text-accent ${
                             isCurrent ? "font-semibold text-accent" : isDone ? "text-muted" : "text-body"
                           }`}
                         >
                           <span
-                            className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                            className={`mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full ${
                               isDone || isCurrent ? "bg-accent" : "bg-dim"
                             }`}
                           />
-                          <span className="truncate">{task.title}</span>
+                          <span className="min-w-0">{task.title}</span>
                         </Link>
                       </li>
                     );

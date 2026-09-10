@@ -94,7 +94,7 @@ export default function TaskBody({ body, footer }: TaskBodyProps) {
         {footer}
       </div>
       {hints.length > 0 && (
-        <aside className="border-t border-line pt-6 text-[15px] text-body lg:border-l lg:border-t-0 lg:pl-7 lg:pt-1">
+        <aside className="border-t border-line pt-6 text-[15px] text-body lg:sticky lg:top-8 lg:self-start lg:border-l lg:border-t-0 lg:pl-7 lg:pt-1">
           {hints.map((s, i) => (
             <details key={i}>
               <summary className="cursor-pointer select-none font-serif text-xl font-medium text-ink marker:text-sm marker:text-dim hover:text-accent">
