@@ -2,39 +2,58 @@
 
 import Link from "next/link";
 import type { Module } from "@/lib/content";
-import { t } from "@/lib/i18n";
+import { duration, moduleNumber, t } from "@/lib/i18n";
 import ModuleIcon from "@/components/ModuleIcon";
 import ProgressBar from "@/components/ProgressBar";
 import { useDoneSet } from "@/components/useDoneSet";
 
 interface ModuleCardProps {
   module: Module;
+  /** Суммарная оценка времени по задачам модуля, минут. */
+  minutes: number;
 }
 
-/** Карточка модуля в каталоге: иконка, название, прогресс, «N из M задач». */
-export default function ModuleCard({ module: mod }: ModuleCardProps) {
+/** Строка программы: модуль как глава — номер, название, описание, прогресс, время. */
+export default function ModuleCard({ module: mod, minutes }: ModuleCardProps) {
   const { done } = useDoneSet();
   const doneCount = mod.tasks.filter((id) => done.has(id)).length;
+  const total = mod.tasks.length;
+  const next = mod.tasks.find((id) => !done.has(id));
+  const isComplete = doneCount === total;
+  // Линейка слева показывает состояние: серая — не начат, акцент — в работе, чернила — пройден.
+  const rule = isComplete ? "border-ink" : doneCount > 0 ? "border-accent" : "border-line";
+  const status =
+    doneCount === 0
+      ? t.home.moduleNotStarted(total)
+      : next
+        ? t.home.moduleInProgress(doneCount, total, next)
+        : t.home.moduleComplete(total);
   return (
     <Link
       href={`/module/${mod.id}`}
-      className="block rounded-xl border p-4 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
+      className={`group grid grid-cols-[3.5rem_1fr] gap-x-4 gap-y-3 border p-5 transition-colors hover:border-accent sm:grid-cols-[5rem_1fr_18rem_5rem] sm:gap-x-6 sm:p-7 ${rule}`}
     >
-      <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
-          <ModuleIcon name={mod.icon} className="h-5 w-5" />
+      <span
+        className={`font-numeral text-4xl font-bold leading-none sm:text-5xl ${doneCount > 0 ? "text-accent" : "text-dim"}`}
+      >
+        {moduleNumber(mod.id).padStart(2, "0")}
+      </span>
+      <span className="flex min-w-0 flex-col gap-2">
+        <span className="flex items-center gap-3">
+          <span className="font-serif text-2xl font-medium leading-tight group-hover:text-accent">
+            {mod.title}
+          </span>
+          <ModuleIcon name={mod.icon} className="h-5 w-5 shrink-0 text-dim group-hover:text-accent" />
         </span>
-        <div className="min-w-0 flex-1">
-          <h2 className="font-semibold">{t.module.heading(mod.id, mod.title)}</h2>
-          <p className="mt-1 text-sm text-gray-600">{mod.description}</p>
-        </div>
-      </div>
-      <div className="mt-3 flex items-center gap-3">
-        <ProgressBar value={doneCount} max={mod.tasks.length} />
-        <span className="shrink-0 text-xs text-gray-500">
-          {t.home.tasksOf(doneCount, mod.tasks.length)}
-        </span>
-      </div>
+        <span className="text-[15px] leading-relaxed text-body">{mod.description}</span>
+      </span>
+      <span className="col-start-2 flex flex-col gap-2 sm:col-start-3 sm:pt-1.5">
+        <ProgressBar value={doneCount} max={total} />
+        <span className="text-sm text-muted">{status}</span>
+      </span>
+      <span className="col-start-2 font-mono text-xs text-muted sm:col-start-4 sm:pt-1.5 sm:text-right sm:text-[13px]">
+        {duration(minutes)}
+      </span>
     </Link>
   );
 }

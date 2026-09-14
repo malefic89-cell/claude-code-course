@@ -5,10 +5,12 @@ interface ProgressBarProps {
   value: number;
   /** Всего. */
   max: number;
+  /** Цвет дорожки: на листе — светло-серый, на акцентной подложке — цвет листа. */
+  track?: "faint" | "paper";
 }
 
-/** Горизонтальный индикатор прогресса. */
-export default function ProgressBar({ value, max }: ProgressBarProps) {
+/** Тонкая линейка прогресса в стиле «Журнал». */
+export default function ProgressBar({ value, max, track = "faint" }: ProgressBarProps) {
   const percent = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div
@@ -17,12 +19,9 @@ export default function ProgressBar({ value, max }: ProgressBarProps) {
       aria-valuenow={value}
       aria-valuemin={0}
       aria-valuemax={max}
-      className="h-2 w-full overflow-hidden rounded-full bg-gray-200"
+      className={`h-1 w-full ${track === "paper" ? "bg-paper" : "bg-faint"}`}
     >
-      <div
-        className="h-full rounded-full bg-emerald-500 transition-[width] duration-300"
-        style={{ width: `${percent}%` }}
-      />
+      <div className="h-full bg-accent transition-[width] duration-700 ease-out" style={{ width: `${percent}%` }} />
     </div>
   );
 }

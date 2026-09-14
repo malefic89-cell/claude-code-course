@@ -2,21 +2,19 @@ import type { Difficulty } from "@/lib/content";
 import { t } from "@/lib/i18n";
 
 const STYLES: Record<Difficulty, string> = {
-  easy: "bg-emerald-100 text-emerald-700",
-  medium: "bg-amber-100 text-amber-700",
-  hard: "bg-rose-100 text-rose-700",
+  easy: "text-muted",
+  medium: "text-warn",
+  hard: "text-danger",
 };
 
 interface DifficultyBadgeProps {
   difficulty: Difficulty;
 }
 
-/** Бейдж сложности задачи. */
+/** Метка сложности: моноширинная капитель, цвет по уровню. */
 export default function DifficultyBadge({ difficulty }: DifficultyBadgeProps) {
   return (
-    <span
-      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${STYLES[difficulty]}`}
-    >
+    <span className={`font-mono text-xs uppercase tracking-wider ${STYLES[difficulty]}`}>
       {t.difficulty[difficulty]}
     </span>
   );

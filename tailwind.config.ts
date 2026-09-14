@@ -8,15 +8,35 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Палитра «Журнал»: семантические имена поверх CSS-переменных из globals.css.
+      // Светлые и тёмные значения задаются там; компоненты не знают о теме.
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        paper: "var(--paper)",
+        ink: "var(--ink)",
+        body: "var(--body)",
+        muted: "var(--muted)",
+        dim: "var(--dim)",
+        line: "var(--line)",
+        faint: "var(--faint)",
+        warn: "var(--warn)",
+        danger: "var(--danger)",
+        accent: {
+          DEFAULT: "var(--accent)",
+          fg: "var(--accent-fg)",
+          soft: "var(--accent-soft)",
+          line: "var(--accent-line)",
+        },
+        code: {
+          bg: "var(--code-bg)",
+          fg: "var(--code-fg)",
+        },
       },
-      // Переменные объявляет next/font/local в app/layout.tsx.
-      // Через theme они попадают в preflight: sans — на html, mono — на code/pre.
+      // Переменные объявляет next/font/google в app/layout.tsx.
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
+        numeral: ["var(--font-numeral)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "Consolas", "monospace"],
       },
     },
   },

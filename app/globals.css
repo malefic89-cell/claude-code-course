@@ -1,28 +1,217 @@
+@import "./fonts.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /*
- * Приложение оформлено светлой палитрой (Tailwind-классы text-gray-*, bg-emerald-*
- * без dark:-вариантов), поэтому тема зафиксирована светлой.
- * Тёмная тема — отдельная задача: включать её нужно вместе с dark:-вариантами
- * во всех компонентах, иначе серый текст ложится на тёмный фон.
+ * Оформление «Журнал»: лист, чернила, один акцентный цвет.
+ * Все цвета — семантические переменные; тёмная тема переопределяет их
+ * под html[data-theme="dark"]. Компоненты не используют dark:-варианты.
+ * Атрибут data-theme выставляет lib/theme.ts (скрипт в layout — до первой отрисовки).
  */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #ffffff;
+  --ink: #141216;
+  --body: #3d3944;
+  --muted: #6b6672;
+  --dim: #c9c4d1;
+  --line: #e6e3ea;
+  --faint: #eeecf1;
+  --accent: #5b1fe6;
+  --accent-fg: #ffffff;
+  --accent-soft: #f3eefe;
+  --accent-line: #cdbcf7;
+  --code-bg: #141216;
+  --code-fg: #f4f2f7;
+  --warn: #b45309;
+  --danger: #be123c;
   color-scheme: light;
 }
 
-/* Шрифт задаётся через theme.fontFamily в tailwind.config.ts (preflight ставит
-   его на html), поэтому здесь font-family не переопределяем. */
+/*
+ * Тёмные значения объявлены дважды: для явного выбора (data-theme="dark")
+ * и как запасной вариант по системной настройке, когда скрипт темы не выполнился
+ * (JS отключён) и атрибута нет вовсе. Менять оба блока синхронно.
+ */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --paper: #131118;
+    --ink: #f1eef5;
+    --body: #cfc9d6;
+    --muted: #9a93a3;
+    --dim: #4a4552;
+    --line: #2a2630;
+    --faint: #1e1a25;
+    --accent: #9d7bff;
+    --accent-fg: #120c24;
+    --accent-soft: #221b38;
+    --accent-line: #4b3a80;
+    --code-bg: #1e1a25;
+    --code-fg: #f1eef5;
+    --warn: #f0a94a;
+    --danger: #fb7185;
+    color-scheme: dark;
+  }
+}
+
+html[data-theme="dark"] {
+  --paper: #131118;
+  --ink: #f1eef5;
+  --body: #cfc9d6;
+  --muted: #9a93a3;
+  --dim: #4a4552;
+  --line: #2a2630;
+  --faint: #1e1a25;
+  --accent: #9d7bff;
+  --accent-fg: #120c24;
+  --accent-soft: #221b38;
+  --accent-line: #4b3a80;
+  --code-bg: #1e1a25;
+  --code-fg: #f1eef5;
+  --warn: #f0a94a;
+  --danger: #fb7185;
+  color-scheme: dark;
+}
+
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+/* Шаги инструкции: цифры антиквой акцентного цвета, как на полях книги. */
+.task-steps ol {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: step;
+}
+.task-steps ol > li {
+  position: relative;
+  padding-left: 2.25rem;
+  counter-increment: step;
+}
+.task-steps ol > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-numeral), Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15em;
+  line-height: 1.5;
+  color: var(--accent);
+}
+/* Вложенные списки внутри шага — обычные маркеры. */
+.task-steps ol > li ul {
+  list-style: disc;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* ---- Движение. Всё отключается при prefers-reduced-motion. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  /* Страница «переворачивается»: лёгкий подъём с проявлением. */
+  @keyframes page-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page-in {
+    animation: page-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Галочка прорисовывается штрихом. */
+  @keyframes check-draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  .check-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .check-draw[data-animate="true"] {
+    animation: check-draw 380ms cubic-bezier(0.2, 0.7, 0.2, 1) 80ms both;
+  }
+
+  /* Кнопка при отметке слегка «припечатывается». */
+  @keyframes stamp {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+  }
+  .stamp {
+    animation: stamp 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Баннер «модуль пройден» поднимается снизу. */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rise {
+    animation: rise 520ms cubic-bezier(0.2, 0.7, 0.2, 1) 120ms both;
+  }
+}
+
+/* Маскот: рот-подчёркивание мигает как курсор терминала. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes cursor-blink {
+    0%, 55% { opacity: 1; }
+    60%, 95% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .mascot-cursor {
+    animation: cursor-blink 1.6s steps(1) infinite;
+  }
+}
+
+/*
+ * Скриншоты в тёмной теме: инверсия с поворотом оттенка. Для терминальных
+ * кадров (текст на ровном фоне) даёт вид тёмного терминала, синие команды
+ * остаются синими. Если для кадра есть отдельный тёмный файл (суффикс -dark),
+ * рендер подставляет его и инверсия не применяется (data-invert="false").
+ */
+html[data-theme="dark"] .screenshot[data-invert="true"] {
+  filter: invert(0.92) hue-rotate(180deg);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .screenshot[data-invert="true"] {
+    filter: invert(0.92) hue-rotate(180deg);
+  }
+}
+
+/* Пара кадров light/dark: показывается один, по теме. */
+.screenshot-dark { display: none; }
+html[data-theme="dark"] .screenshot-light { display: none; }
+html[data-theme="dark"] .screenshot-dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .screenshot-light { display: none; }
+  html:not([data-theme]) .screenshot-dark { display: block; }
+}
+
+/* ---- Фон «бумага»: зерно на весь лист и сетка точек, которая тает под текстовой колонкой. ---- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(var(--dim) 1px, transparent 1.2px);
+  background-size: 240px 240px, 28px 28px;
+  background-position: 0 0, 14px 14px;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.35) 25%, rgba(0, 0, 0, 0.35) 75%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.35) 25%, rgba(0, 0, 0, 0.35) 75%, #000 100%);
+}
+/* В тёмной теме зерно светлое: инвертируем слой. Два блока — как у токенов темы. */
+html[data-theme="dark"] .backdrop {
+  filter: invert(1);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .backdrop {
+    filter: invert(1);
   }
 }

@@ -98,7 +98,14 @@ export function getTask(id: string): Task | null {
   const file = path.join(TASKS_DIR, `task-${id}.md`);
   if (!fs.existsSync(file)) return null;
   const { data, content } = matter(fs.readFileSync(file, "utf-8"));
-  return { ...assertTaskMeta(data, file), body: content.trim() };
+  const meta = assertTaskMeta(data, file);
+  // Модуль из frontmatter должен существовать и содержать задачу — иначе навигация
+  // и баннер «модуль пройден» ведут в никуда. Ошибка сборки, не тихий пропуск.
+  const mod = getModule(meta.module);
+  if (!mod || !mod.tasks.includes(meta.id)) {
+    throw new Error(`Задача ${meta.id}: модуль "${meta.module}" не найден или не содержит её (${file})`);
+  }
+  return { ...meta, body: content.trim() };
 }
 
 /** Задачи модуля в порядке, заданном в метаданных модуля. */
@@ -110,14 +117,31 @@ export function getModuleTasks(moduleId: string): Task[] {
     .filter((t): t is Task => t !== null);
 }
 
-/** Сосед задачи для навигации «предыдущая/следующая». */
+/** Путь к тёмному варианту картинки из контента: /screenshots/x.png → /screenshots/x-dark.png. */
+export function darkVariant(src: string): string {
+  return src.replace(/(\.[a-z0-9]+)$/i, "-dark$1");
+}
+
+/** Есть ли в public/ тёмный вариант картинки (проверяется при сборке). */
+export function hasDarkVariant(src: string): boolean {
+  if (!src.startsWith("/")) return false;
+  return fs.existsSync(path.join(process.cwd(), "public", darkVariant(src)));
+}
+
+/** Все задачи курса в порядке прохождения: модули по id, внутри — по списку модуля. */
+export function getCourseOrder(): string[] {
+  return getModules().flatMap((m) => m.tasks);
+}
+
+/**
+ * Сосед задачи для навигации «предыдущая/следующая».
+ * Порядок сквозной: за последней задачей модуля идёт первая задача следующего.
+ */
 export function getAdjacentTaskIds(taskId: string): {
   prev: string | null;
   next: string | null;
 } {
-  const task = getTask(taskId);
-  if (!task) return { prev: null, next: null };
-  const order = getModule(task.module)?.tasks ?? [];
+  const order = getCourseOrder();
   const i = order.indexOf(taskId);
   return {
     prev: i > 0 ? order[i - 1] : null,

@@ -10,36 +10,60 @@ interface TaskListProps {
   tasks: TaskMeta[];
 }
 
-/** Список задач модуля со статусами выполнения и сложностью. */
+/** Оглавление модуля: строки задач со статусом, текущая подсвечена. */
 export default function TaskList({ tasks }: TaskListProps) {
   const { done } = useDoneSet();
+  const currentId = tasks.find((task) => !done.has(task.id))?.id ?? null;
   return (
-    <ul className="space-y-2">
+    <ul>
       {tasks.map((task) => {
         const isDone = done.has(task.id);
+        const isCurrent = task.id === currentId;
         return (
           <li key={task.id}>
             <Link
               href={`/task/${task.id}`}
-              className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border p-3 transition-colors hover:border-emerald-500 hover:bg-emerald-50/40"
+              aria-current={isCurrent ? "step" : undefined}
+              className={`group grid grid-cols-[1.25rem_1fr_auto] items-center gap-x-3 gap-y-1 border-b border-line py-3 sm:grid-cols-[1.25rem_4rem_1fr_5rem_4.5rem] sm:gap-x-4 ${
+                isCurrent ? "-mx-3 bg-accent-soft px-3" : ""
+              }`}
             >
+              <span className="flex h-5 w-5 items-center justify-center" aria-label={isDone ? t.task.statusDone : undefined}>
+                {isDone ? (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-accent"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12l5 5L20 7" />
+                  </svg>
+                ) : isCurrent ? (
+                  <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+                ) : (
+                  <span className="h-[18px] w-[18px] rounded-full border-[1.5px] border-dim" />
+                )}
+              </span>
+              <span className={`font-mono text-[13px] ${isCurrent ? "text-accent" : "text-muted"}`}>
+                {task.id}
+              </span>
               <span
-                aria-label={isDone ? t.task.statusDone : undefined}
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs ${
-                  isDone
-                    ? "border-emerald-500 bg-emerald-500 text-white"
-                    : "border-gray-300 text-transparent"
-                }`}
+                className={`col-span-2 col-start-2 text-base sm:col-span-1 sm:col-start-3 ${
+                  isDone ? "text-muted line-through" : isCurrent ? "font-semibold" : ""
+                } group-hover:text-accent`}
               >
-                ✓
+                {task.title}
               </span>
-              <span className="min-w-[10rem] flex-1">
-                <span className={isDone ? "text-gray-400 line-through" : ""}>
-                  {task.id}. {task.title}
-                </span>
-              </span>
-              <span className="flex shrink-0 items-center gap-2 text-xs text-gray-400">
+              <span className="col-start-2 sm:col-start-4">
                 <DifficultyBadge difficulty={task.difficulty} />
+              </span>
+              <span className="col-start-3 font-mono text-[13px] text-muted sm:col-start-5 sm:text-right">
                 {t.task.minutes(task.estimated_minutes)}
               </span>
             </Link>

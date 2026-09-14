@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import Link from "next/link";
+import { getModules, getModuleTasks } from "@/lib/content";
 import { t } from "@/lib/i18n";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
+import CourseRail, { type RailModule } from "@/components/CourseRail";
+import Mascot from "@/components/Mascot";
+import ProgrammeLink from "@/components/ProgrammeLink";
+import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: t.siteTitle,
@@ -25,19 +19,39 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Рейке нужны только id и названия — без Markdown-тел задач.
+  const railModules: RailModule[] = getModules().map((m) => ({
+    id: m.id,
+    title: m.title,
+    tasks: getModuleTasks(m.id).map(({ id, title }) => ({ id, title })),
+  }));
   return (
-    <html lang="ru">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <header className="border-b">
-          <div className="mx-auto max-w-2xl px-4 py-3 sm:px-6">
-            <Link href="/" className="font-semibold hover:text-emerald-700">
-              {t.siteTitle}
+    <html lang="ru" suppressHydrationWarning>
+      <head>
+        {/* Тема выставляется до первой отрисовки, чтобы страница не мигала белым. */}
+        <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
+      <body className="antialiased">
+        {/* Фон-«бумага»: зерно и сетка точек в отступах, см. globals.css */}
+        <div aria-hidden="true" className="backdrop" />
+        <header className="border-b-2 border-ink">
+          <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-4 sm:px-10">
+            <Link href="/" className="group flex items-center gap-2.5 font-serif text-xl font-bold hover:text-accent">
+              <Mascot className="h-8 w-8 transition-transform group-hover:-rotate-6" />
+              <span>{t.siteTitle}</span>
             </Link>
+            <div className="flex items-center gap-4">
+              <ProgrammeLink className="text-xs font-semibold uppercase tracking-wider text-muted hover:text-ink">
+                {t.nav.programme}
+              </ProgrammeLink>
+              <ThemeToggle />
+            </div>
           </div>
         </header>
-        {children}
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-12">
+          <CourseRail modules={railModules} />
+          {children}
+        </div>
       </body>
     </html>
   );
