@@ -31,6 +31,7 @@
   /page.tsx         — главная: заголовок, карточка прогресса, программа
   /module/[id]      — страница модуля с оглавлением задач
   /task/[id]        — страница задачи
+  /finish           — финальный экран: сводка, ссылка на «Полку» ученика, что дальше
 /components         — UI-компоненты (ModuleCard, TaskList, TaskBody, TaskCompletion, CourseRail…)
 /content
   /modules          — module-00.json, module-01.json… (метаданные модулей)

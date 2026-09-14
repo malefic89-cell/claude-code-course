@@ -99,7 +99,10 @@ export default function TaskCompletion({
               <span className="transition-transform group-hover:translate-x-1">→</span>
             </Link>
           ) : (
-            <p className="text-[15px] text-body">{t.task.courseComplete}</p>
+            <Link href="/finish" className="group inline-flex items-center gap-2 text-[15px] text-body hover:text-accent">
+              <span>{t.task.courseComplete}</span>
+              <span className="transition-transform group-hover:translate-x-1">{t.finish.open}</span>
+            </Link>
           )}
         </aside>
       )}
