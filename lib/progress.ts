@@ -8,9 +8,14 @@
 
 const STORAGE_KEY = "ccc-progress-v1";
 
-/** Прогресс: множество id выполненных задач. */
+/**
+ * Прогресс: множество id выполненных задач и, после финала, ссылка на
+ * опубликованный продукт ученика («Полку»). Ссылка — тоже часть прогресса:
+ * при смене хранилища на серверное она переезжает вместе с ним.
+ */
 export interface Progress {
   done: string[];
+  shelfUrl?: string;
 }
 
 function read(): Progress {
@@ -25,7 +30,10 @@ function read(): Progress {
       Array.isArray((parsed as Progress).done) &&
       (parsed as Progress).done.every((x) => typeof x === "string")
     ) {
-      return parsed as Progress;
+      const p = parsed as Progress;
+      return typeof p.shelfUrl === "string" && p.shelfUrl !== ""
+        ? { done: p.done, shelfUrl: p.shelfUrl }
+        : { done: p.done };
     }
     return { done: [] };
   } catch {
@@ -111,9 +119,25 @@ export function unmarkDone(taskId: string): Progress {
   return p;
 }
 
-/** Полный сброс прогресса. */
+/** Ссылка на опубликованную «Полку» или null, если ученик её не сохранял. */
+export function getShelfUrl(): string | null {
+  return read().shelfUrl ?? null;
+}
+
+/** Сохранить ссылку на «Полку»; пустая строка удаляет её. */
+export function setShelfUrl(url: string): Progress {
+  const p = read();
+  const trimmed = url.trim();
+  if (trimmed === "") delete p.shelfUrl;
+  else p.shelfUrl = trimmed;
+  write(p);
+  return p;
+}
+
+/** Сброс отметок; ссылка на «Полку» остаётся — это продукт, а не прогресс по курсу. */
 export function reset(): Progress {
-  const p: Progress = { done: [] };
+  const shelfUrl = read().shelfUrl;
+  const p: Progress = shelfUrl ? { done: [], shelfUrl } : { done: [] };
   write(p);
   return p;
 }

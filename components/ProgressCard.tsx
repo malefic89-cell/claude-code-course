@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { TaskMeta } from "@/lib/content";
 import { t } from "@/lib/i18n";
 import ProgressBar from "@/components/ProgressBar";
@@ -27,7 +28,14 @@ export default function ProgressCard({ tasks }: ProgressCardProps) {
       </p>
       <ProgressBar value={doneCount} max={tasks.length} track="paper" />
       <p className="text-[15px] leading-snug text-body">
-        {next ? t.home.progressNext(next.id, next.title) : t.home.progressDone}
+        {next ? (
+          t.home.progressNext(next.id, next.title)
+        ) : (
+          <Link href="/finish" className="group inline-flex items-center gap-2 hover:text-accent">
+            <span>{t.home.progressDone}</span>
+            <span className="transition-transform group-hover:translate-x-1">{t.finish.open}</span>
+          </Link>
+        )}
       </p>
     </section>
   );
